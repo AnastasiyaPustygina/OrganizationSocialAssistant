@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    <LinearLayout
+        android:background="@color/white1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/tv_reg_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/purple_700"
+            android:textStyle="bold"
+            android:text="Заполнение заявки"/>
+        <TextView
+            android:id="@+id/tv_reg_forName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:text="Название организации"/>
+        <EditText
+            android:id="@+id/ed_reg_name"
+            android:textColor="@color/purple_700"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="15sp"
+            android:background="@drawable/for_ed_text"
+            android:textColorHint="@color/for_hint"
+            android:hint="@string/ed_name" />
+        <TextView
+            android:id="@+id/tv_reg_forLog"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="15dp"
+            android:text="Логин"/>
+        <EditText
+            android:id="@+id/ed_reg_log"
+            android:textColor="@color/purple_700"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="15sp"
+            android:background="@drawable/for_ed_text"
+            android:textColorHint="@color/for_hint"
+            android:hint="@string/ed_log" />
+        <TextView
+            android:id="@+id/tv_reg_forType"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="15dp"
+            android:text="Выберите тип организации"/>
+        <RadioGroup
+            android:id="@+id/rg_reg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <RadioButton
+                android:buttonTint="@color/purple_200"
+                android:id="@+id/rbt_reg_nursingHome"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/for_first_ava"
+                android:text="Дом престарелых"/>
+            <RadioButton
+                android:id="@+id/rbt_reg_orphanHome"
+                android:textColor="@color/for_first_ava"
+                android:layout_width="wrap_content"
+                android:buttonTint="@color/purple_200"
+                android:layout_height="wrap_content"
+                android:text="Детский дом"/>
+            <RadioButton
+                android:id="@+id/rbt_reg_hospice"
+                android:buttonTint="@color/purple_200"
+                android:textColor="@color/for_first_ava"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Хоспис"/>
+        </RadioGroup>
+        <TextView
+            android:id="@+id/tv_reg_forAddress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="15dp"
+            android:text="Адрес"/>
+        <EditText
+            android:id="@+id/ed_reg_address"
+            android:textColor="@color/purple_700"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="15sp"
+            android:background="@drawable/for_ed_text"
+            android:textColorHint="@color/for_hint"
+            android:hint="@string/ed_address" />
+        <TextView
+            android:id="@+id/tv_reg_forLink"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="15dp"
+            android:text="Ссылка на официальный сайт "/>
+            <TextView
+                android:id="@+id/tv_reg_notNecessary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/for_first_ava"
+                android:textSize="15dp"
+                android:text="@string/not_necessary"/>
+        <EditText
+            android:id="@+id/ed_reg_link"
+            android:textColor="@color/purple_700"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="15sp"
+            android:background="@drawable/for_ed_text"
+            android:textColorHint="@color/for_hint"
+            android:hint="@string/ed_link" />
+        <TextView
+            android:id="@+id/tv_reg_forPass"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="15dp"
+            android:text="Пароль"/>
+        <EditText
+            android:id="@+id/ed_reg_pass1"
+            android:textColor="@color/purple_700"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="15sp"
+            android:inputType="textPassword"
+            android:background="@drawable/for_ed_text"
+            android:textColorHint="@color/for_hint"
+            android:hint="@string/ed_pas1" />
+        <TextView
+            android:id="@+id/tv_reg_forPass2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="15dp"
+            android:text="Подтверждение пароля"/>
+        <EditText
+            android:id="@+id/ed_reg_pass2"
+            android:textColor="@color/purple_700"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="15sp"
+            android:inputType="textPassword"
+            android:background="@drawable/for_ed_text"
+            android:textColorHint="@color/for_hint"
+        android:hint="@string/ed_pas2"/>
+
+        <TextView
+            android:id="@+id/checking"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text=" "
+            android:textColor="@color/red" />
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/bt_reg_fr_reg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:background="@drawable/dark_circle_button"
+            android:text="  оставить заявку  "
+            android:textColor="@color/white"
+            android:textSize="15sp" />
+    </LinearLayout>
+    </ScrollView>
+</FrameLayout>

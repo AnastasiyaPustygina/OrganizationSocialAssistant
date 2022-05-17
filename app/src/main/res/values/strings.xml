@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">AppForOrg</string>
+    <string name="ed_log"><font size="15">Введите логин</font></string>
+    <string name="ed_name"><font size="15">Введите название организации</font></string>
+    <string name="ed_pas"><font size="15">Введите пароль</font></string>
+    <string name="ed_desc"><font size="13">Введите описание вашей организации</font></string>
+    <string name="ed_needs"><font size="13">Введите потребности</font></string>
+    <string name="ed_link"><font size="15">Введите ссылку на официальный сайт</font></string>
+    <string name="not_necessary"><font size="15">(не обязательно)</font></string>
+    <string name="ed_address"><font size="15">Введите адресс (без запятых)</font></string>
+    <string name="ed_pas1"><font size="15">Введите пароль</font></string>
+    <string name="ed_pas2"><font size="15">Повторно введите пароль</font></string>
+
+</resources>

@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/white1"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="40">
+        <LinearLayout
+            android:background="@color/white1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+                <TextView
+                    android:id="@+id/tv_prof_profile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="5"
+                    android:gravity="center"
+                    android:text="Профиль"
+                    android:textColor="@color/purple_700"
+                    android:textSize="25dp"
+                    android:textStyle="bold" />
+            <LinearLayout
+                android:id="@+id/ll_prof_photoAndName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="20dp"
+                android:paddingTop="30dp"
+                android:paddingBottom="20dp"
+                android:orientation="horizontal">
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    >
+
+                    <ImageView
+                        android:id="@+id/iv_org_profile_photoOrg"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:src="@mipmap/ic_channel"
+                        app:layout_constraintHeight_percent="1"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintWidth_percent="1" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <TextView
+                    android:id="@+id/tv_org_profile_nameOrg"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:gravity="start"
+                    android:layout_gravity="center"
+                    android:textStyle="bold"
+                    android:text="НАЗВАНИЕ"
+                    android:textColor="@color/black"
+                    android:textSize="18dp" />
+            </LinearLayout>
+            <TextView
+                android:id="@+id/tv_prof_forType"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:text="Тип: "
+                android:textColor="@color/for_hint"
+                android:textSize="15dp" />
+            <TextView
+                android:id="@+id/tv_org_profile_typeOrg"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:text="ТИП"
+                android:textColor="@color/black"
+                android:textSize="15dp" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="@color/forEdit" />
+            <TextView
+                android:id="@+id/tv_prof_forDesc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="left"
+                android:text="Описание: "
+                android:textColor="@color/for_hint"
+                android:textSize="15dp" />
+
+            <LinearLayout
+                android:id="@+id/ll_prof_forEdit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:textSize="15dp"
+                    android:id="@+id/ed_org_profile_descOrg"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/for_ed_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:enabled="false"
+                    android:layout_weight="1" />
+
+                <ImageView
+                    android:id="@+id/iv_org_profile_createDesc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:src="@drawable/iv_write"
+
+                    />
+        </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="@color/forEdit" />
+            <TextView
+                android:id="@+id/tv_prof_forAddress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:text="Адрес: "
+                android:textColor="@color/for_first_ava"
+                android:textSize="15dp" />
+            <TextView
+                android:id="@+id/tv_org_profile_addressOrg"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:text="AДРЕСС"
+                android:textColor="@color/black"
+                android:textSize="15dp" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="@color/forEdit" />
+            <TextView
+                android:id="@+id/tv_prof_forNeeds"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="left"
+                android:text="Потребности: "
+                android:textColor="@color/for_first_ava"
+                android:textSize="15dp" />
+            <LinearLayout
+                android:id="@+id/ll_prof_forEditNeeds"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <EditText
+                    android:id="@+id/ed_org_profile_needsOrg"
+                    android:textSize="15dp"
+                    android:background="@drawable/for_ed_text"
+                    android:layout_width="wrap_content"
+                    android:textColor="@color/black"
+                    android:layout_height="wrap_content"
+                    android:enabled="false"
+                    android:layout_weight="1" />
+            <ImageView
+                android:id="@+id/iv_org_profile_createNeeds"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/iv_write"
+                android:layout_margin="10dp"
+                />
+        </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="@color/forEdit" />
+
+            <TextView
+                android:id="@+id/tv_prof_forLink"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:text="Официальный сайт:"
+                android:textColor="@color/for_first_ava"
+                android:textSize="15dp" />
+            <TextView
+                android:id="@+id/tv_org_profile_linkToWeb"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:text="ССЫЛКА НА САЙТ"
+                android:textColor="@color/black"
+                android:textSize="15dp" />
+        </LinearLayout>
+    </ScrollView>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_prof"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:background="@color/purple_700"
+        android:layout_weight="1">
+
+        <ImageView
+            android:id="@+id/bt_org_profile_chat"
+            android:layout_width="0dp"
+            app:layout_constraintHorizontal_weight="1"
+            android:layout_height="0dp"
+            app:layout_constraintHeight_percent="1"
+            android:layout_alignParentStart="true"
+            android:layout_gravity="center"
+            android:adjustViewBounds="true"
+            android:src="@drawable/bt_msg_dark"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/bt_org_profile_profile"
+            />
+
+        <ImageView
+            android:id="@+id/bt_org_profile_profile"
+            android:layout_width="0dp"
+            app:layout_constraintHorizontal_weight="1"
+            android:layout_height="0dp"
+            app:layout_constraintHeight_percent="1"
+            android:layout_alignStart="@+id/bt_org_profile_chat"
+            android:layout_gravity="center"
+            android:src="@drawable/bt_profile"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/bt_org_profile_chat"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
+</FrameLayout>

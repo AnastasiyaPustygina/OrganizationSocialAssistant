@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_graph.xml"
+    app:startDestination="@id/signInFragment">
+
+    <fragment
+        android:id="@+id/signInFragment"
+        android:name="com.example.appfororg.fragment.SignInFragment"
+        tools:layout="@layout/sign_in_fragment"
+        android:label="SignInFragment" >
+        <action
+            android:id="@+id/action_signInFragment_to_regFragment"
+            app:destination="@id/regFragment" />
+        <action
+            android:id="@+id/action_signInFragment_to_orgProfileFragment"
+            app:destination="@id/orgProfileFragment" />
+    </fragment>
+    <fragment
+        tools:layout="@layout/reg_fragment"
+        android:id="@+id/regFragment"
+        android:name="com.example.appfororg.fragment.RegFragment"
+        android:label="RegFragment" >
+        <action
+            android:id="@+id/action_regFragment_to_signInFragment"
+            app:destination="@id/signInFragment" />
+    </fragment>
+    <fragment
+        tools:layout="@layout/org_profile_fragment"
+        android:id="@+id/orgProfileFragment"
+        android:name="com.example.appfororg.fragment.OrgProfileFragment"
+        android:label="OrgProfileFragment" >
+        <action
+            android:id="@+id/action_orgProfileFragment_to_listOfChatsFragment"
+            app:destination="@id/listOfChatsFragment" />
+    </fragment>
+    <fragment
+        tools:layout="@layout/list_of_chats_fragment"
+        android:id="@+id/listOfChatsFragment"
+        android:name="com.example.appfororg.fragment.ListOfChatsFragment"
+        android:label="ListOfChatsFragment" >
+        <action
+            android:id="@+id/action_listOfChatsFragment_to_orgProfileFragment"
+            app:destination="@id/orgProfileFragment" />
+        <action
+            android:id="@+id/action_listOfChatsFragment_to_chatFragment"
+            app:destination="@id/chatFragment" />
+    </fragment>
+    <fragment
+        tools:layout="@layout/chat_fragment"
+        android:id="@+id/chatFragment"
+        android:name="com.example.appfororg.fragment.ChatFragment"
+        android:label="ChatFragment" >
+        <action
+            android:id="@+id/action_chatFragment_to_listOfChatsFragment"
+            app:destination="@id/listOfChatsFragment" />
+        <action
+            android:id="@+id/action_chatFragment_to_personProfileFragment"
+            app:destination="@id/personProfileFragment" />
+    </fragment>
+    <fragment
+        tools:layout="@layout/person_profile_fragment"
+        android:id="@+id/personProfileFragment"
+        android:name="com.example.appfororg.fragment.PersonProfileFragment"
+        android:label="PersonProfileFragment" >
+        <action
+            android:id="@+id/action_personProfileFragment_to_chatFragment"
+            app:destination="@id/chatFragment" />
+    </fragment>
+</navigation>
