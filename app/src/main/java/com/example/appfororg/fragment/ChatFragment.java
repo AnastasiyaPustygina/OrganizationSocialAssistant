@@ -26,8 +26,10 @@ import com.example.appfororg.R;
 import com.example.appfororg.adapter.ChatArrayAdapter;
 import com.example.appfororg.domain.Message;
 import com.example.appfororg.domain.Person;
+import com.example.appfororg.rest.AppApiVolley;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
@@ -141,10 +143,14 @@ public class ChatFragment extends Fragment {
                     public void onClick(View view) {
                         String curTime = new SimpleDateFormat(
                                 "HH:mm", Locale.getDefault()).format(new Date());
-                        Message myMsg = new Message("me",
+                        Message myMsg = new Message("org",
                                 openHelper.findChatIdByOrgIdAndPerId(orgId, per.getId()), et_msg.getText().toString(),
                                 curTime);
+
                         openHelper.insertMsg(myMsg);
+                        ArrayList<Message> messages = openHelper.findMsgByChatId(
+                                openHelper.findChatIdByOrgIdAndPerId(orgId, per.getId()));
+                        new AppApiVolley(getContext()).addMessages(messages.get(messages.size() - 1));
                         ChatArrayAdapter recyclerAdapter1 = new ChatArrayAdapter(getContext(),
                                 ChatFragment.this, openHelper.
                                 findChatIdByOrgIdAndPerId(orgId, per.getId()));

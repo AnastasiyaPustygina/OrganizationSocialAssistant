@@ -59,16 +59,15 @@ public class ChatListArrayAdapter extends RecyclerView.Adapter<ChatListArrayAdap
         OpenHelper openHelper = new OpenHelper(context, "op", null, OpenHelper.VERSION);
         ArrayList<String> arrListLastMsg = openHelper.findLastMsgValuesByOrgLog(log);
         ArrayList<Integer> arrListChatId = openHelper.findLastChatId(log);
+        Log.e("LastChatId", arrListChatId.toString());
+        Log.e("LastMSG", arrListLastMsg.toString());
+
         curTime = new SimpleDateFormat(
                 "HH:mm:ss:mm", Locale.getDefault()).format(new Date());
         Log.e(curTime, "ПОСЛЕ ПОЛУЧЕНИЯ ПОСЛЕДНИХ СОО И ЧАТОВ");
         ArrayList<Person> arrayListLastPer = new ArrayList<>();
         for (int i = 0; i < arrListChatId.size(); i++) {
-            try {
                 arrayListLastPer.add(openHelper.findPersonByChatId(arrListChatId.get(i)));
-            } catch (Exception e) {
-                Log.e("TAG", e.getMessage() + e.toString());
-            }
         }
         curTime = new SimpleDateFormat(
                 "HH:mm:ss:mm", Locale.getDefault()).format(new Date());

@@ -17,13 +17,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_channel);
-//        try {
-//            new AppApiVolley(this).addOrganization(new Organization(8, "name",
-//                    "log", "type", bitmap, "desc", "address",
-//                    "needs", "link", "pass"));
-//        }catch (Exception e){
-//            Log.e("ERROR", e.getMessage());
-//        }
+
+        new AppApiVolley(this).fillChats();
+        new AppApiVolley(this).fillMsg();
+
     }
 }

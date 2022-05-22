@@ -46,19 +46,33 @@
                         android:id="@+id/iv_org_profile_photoOrg"
                         android:layout_width="0dp"
                         android:layout_height="0dp"
+                        android:background="@color/white1"
                         android:src="@mipmap/ic_channel"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHeight_percent="1"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintWidth_percent="1" />
+
+                    <ImageView
+                        android:id="@+id/bt_main_add"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:src="@drawable/bt_add"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="@+id/iv_org_profile_photoOrg"
+                        app:layout_constraintHeight_percent="0.25"
+                        app:layout_constraintWidth_percent="0.25" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <TextView
                     android:id="@+id/tv_org_profile_nameOrg"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="2"
-                    android:gravity="start"
+                    android:layout_weight="3"
+
+                    android:gravity="center"
                     android:layout_gravity="center"
                     android:textStyle="bold"
                     android:text="НАЗВАНИЕ"

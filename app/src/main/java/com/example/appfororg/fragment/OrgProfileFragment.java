@@ -1,10 +1,13 @@
 package com.example.appfororg.fragment;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +18,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -26,7 +32,11 @@ import androidx.navigation.fragment.NavHostFragment;
 import com.example.appfororg.OpenHelper;
 import com.example.appfororg.R;
 import com.example.appfororg.domain.Organization;
+import com.example.appfororg.domain.Person;
 import com.example.appfororg.rest.AppApiVolley;
+
+import java.io.ByteArrayOutputStream;
+import java.util.Arrays;
 
 public class OrgProfileFragment extends Fragment {
 
@@ -40,7 +50,68 @@ public class OrgProfileFragment extends Fragment {
     private final int height  = Resources.getSystem().getDisplayMetrics().heightPixels;
     private final int width  = Resources.getSystem().getDisplayMetrics().widthPixels;
     private float scale = Resources.getSystem().getDisplayMetrics().density;
+    public static SharedPreferences sharedPreferences = SignInFragment.sharedPreferences;
+    private ActivityResultLauncher<String> myActivityResultLauncher;
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        myActivityResultLauncher = registerForActivityResult(
+                new ActivityResultContracts.GetContent(), new ActivityResultCallback<Uri>() {
+
+                    @Override
+                    public void onActivityResult(Uri result) {
+                        OpenHelper openHelper = new OpenHelper(getContext(), "op",
+                                null, OpenHelper.VERSION);
+                        Log.e("All_Org", openHelper.findAllOrganizations().toString());
+                        Log.e("NameOrg", getArguments().getString("LOG"));
+
+                        Organization organization = openHelper.findOrgByLogin(
+                                getArguments().getString("LOG"));
+                        iv_orgAva.setImageURI(result);
+                        byte[] photoOrg = null;
+                        Bitmap bitmap = null;
+                        try {
+                            iv_orgAva.buildDrawingCache();
+                            bitmap = iv_orgAva.getDrawingCache().copy(Bitmap.Config.RGB_565, false);
+                            iv_orgAva.setDrawingCacheEnabled(false);
+                            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                            Bitmap.CompressFormat imFor = Bitmap.CompressFormat.JPEG;
+                            bitmap.compress(imFor, 100, stream);
+                            photoOrg = stream.toByteArray();
+
+                            bitmap.recycle();
+                        }catch (Exception e){
+                            Log.e("DOWNLOAD IMAGES","Cannot to use a recycled bitmap");
+                        }
+
+
+                        Log.e("BEFORE_CHANGE_PHOTO", Arrays.toString(photoOrg));
+
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        StringBuilder stringBuilder = new StringBuilder();
+                        for (int i = 0; i < photoOrg.length - 1; i++) {
+                            stringBuilder.append(String.valueOf(photoOrg[i])).append(" ");
+                        }
+                        stringBuilder.append(String.valueOf(
+                                photoOrg[photoOrg.length - 1]));
+
+                        editor.putString("org_photo" + organization.getAddress(), stringBuilder.toString());
+                        editor.commit();
+
+                        Log.e("AFTER_CHANGE_PHOTO", sharedPreferences.getString
+                                ("org_photo" + organization.getAddress(),"noPrefPhoto"));
+
+                        new AppApiVolley(getContext()).updateOrganization(
+                                organization.getId(), organization.getName(), organization.getLogin(),
+                                organization.getType(), photoOrg, organization.getDescription(),
+                                organization.getAddress(), organization.getNeeds(),
+                                organization.getLinkToWebsite(), organization.getPass());
+                    }
+                }
+        );
+
+    }
 
     @Nullable
     @Override
@@ -133,9 +204,8 @@ public class OrgProfileFragment extends Fragment {
                     new AppApiVolley(getContext()).updateOrganization(
                             organization.getId(), organization.getName(), organization.getLogin(),
                             organization.getType(), organization.getPhotoOrg(), et_desc.getText().toString(),
-                            organization.getAddress(), organization.getNeeds(), organization.getLinkToWebsite(),
-                            organization.getPass()
-                    );
+                            organization.getAddress(), et_needs.getText().toString(),
+                            organization.getLinkToWebsite(), organization.getPass());
                     bt_createDesc.setImageDrawable(getResources().getDrawable(R.drawable.iv_write));
                     et_desc.setEnabled(false);
                     et_desc.setFocusableInTouchMode(false);
@@ -153,8 +223,8 @@ public class OrgProfileFragment extends Fragment {
                     et_needs.setEnabled(true);
                     et_needs.requestFocus();
                     et_needs.setFocusableInTouchMode(true);
-                    InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(
-                            Context.INPUT_METHOD_SERVICE);
+                    InputMethodManager inputMethodManager = (InputMethodManager)
+                            getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                     inputMethodManager.showSoftInput(et_needs, InputMethodManager.SHOW_FORCED);
                     bt_createNeeds.setImageDrawable(getResources().getDrawable(R.drawable.check_mark));
                     isNeedsCompleted = !isNeedsCompleted;
@@ -163,7 +233,7 @@ public class OrgProfileFragment extends Fragment {
                 else{
                     new AppApiVolley(getContext()).updateOrganization(
                             organization.getId(), organization.getName(), organization.getLogin(),
-                            organization.getType(), organization.getPhotoOrg(), organization.getDescription(),
+                            organization.getType(), organization.getPhotoOrg(), et_desc.getText().toString(),
                             organization.getAddress(), et_needs.getText().toString(), organization.getLinkToWebsite(),
                             organization.getPass()
                     );
@@ -180,11 +250,13 @@ public class OrgProfileFragment extends Fragment {
 
         Bitmap bitmap = BitmapFactory.
                 decodeByteArray(organization.getPhotoOrg(), 0, organization.getPhotoOrg().length);
-        RoundedBitmapDrawable roundDrawable = RoundedBitmapDrawableFactory.create(getResources(), bitmap);
-        roundDrawable.setCornerRadius(Math.max(roundDrawable.getMinimumWidth(),
-                roundDrawable.getMinimumHeight()));
-        roundDrawable.setCircular(true);
-        iv_orgAva.setImageDrawable(roundDrawable);
+        iv_orgAva.setImageBitmap(bitmap);
+        iv_orgAva.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                myActivityResultLauncher.launch("image/*");
+            }
+        });
         tv_type.setText(organization.getType());
         tv_address.setText(organization.getAddress());
         tv_name.setText(organization.getName());

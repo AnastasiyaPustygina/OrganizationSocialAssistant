@@ -11,6 +11,7 @@
         <entry key="..\:/Users/user/AndroidStudioProjects/AppForOrg/app/src/main/res/drawable/arrow_back.xml" value="0.1" />
         <entry key="..\:/Users/user/AndroidStudioProjects/AppForOrg/app/src/main/res/drawable/ava.xml" value="0.101" />
         <entry key="..\:/Users/user/AndroidStudioProjects/AppForOrg/app/src/main/res/drawable/blue_arrow_back.xml" value="0.112" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/AppForOrg/app/src/main/res/drawable/bt_add.xml" value="0.1" />
         <entry key="..\:/Users/user/AndroidStudioProjects/AppForOrg/app/src/main/res/drawable/bt_msg.xml" value="0.101" />
         <entry key="..\:/Users/user/AndroidStudioProjects/AppForOrg/app/src/main/res/drawable/bt_msg_dark.xml" value="0.101" />
         <entry key="..\:/Users/user/AndroidStudioProjects/AppForOrg/app/src/main/res/drawable/bt_profile.xml" value="0.101" />
@@ -29,7 +30,7 @@
         <entry key="..\:/Users/user/AndroidStudioProjects/AppForOrg/app/src/main/res/layout/list_of_chats_fragment.xml" value="0.1" />
         <entry key="..\:/Users/user/AndroidStudioProjects/AppForOrg/app/src/main/res/layout/msg_my.xml" value="0.2" />
         <entry key="..\:/Users/user/AndroidStudioProjects/AppForOrg/app/src/main/res/layout/msg_other.xml" value="0.12048611111111111" />
-        <entry key="..\:/Users/user/AndroidStudioProjects/AppForOrg/app/src/main/res/layout/org_profile_fragment.xml" value="0.15" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/AppForOrg/app/src/main/res/layout/org_profile_fragment.xml" value="0.22" />
         <entry key="..\:/Users/user/AndroidStudioProjects/AppForOrg/app/src/main/res/layout/person_profile_fragment.xml" value="0.22" />
         <entry key="..\:/Users/user/AndroidStudioProjects/AppForOrg/app/src/main/res/layout/reg_fragment.xml" value="0.16" />
         <entry key="..\:/Users/user/AndroidStudioProjects/AppForOrg/app/src/main/res/layout/sign_in_fragment.xml" value="0.16" />

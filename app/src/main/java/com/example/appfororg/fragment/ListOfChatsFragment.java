@@ -28,6 +28,7 @@ import java.util.Date;
 import java.util.Locale;
 
 public class ListOfChatsFragment extends Fragment {
+    private ChatListArrayAdapter chatListArrayAdaptor;
     private final int height  = Resources.getSystem().getDisplayMetrics().heightPixels;
     private final int width  = Resources.getSystem().getDisplayMetrics().widthPixels;
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -43,11 +44,18 @@ public class ListOfChatsFragment extends Fragment {
         } else {
             tv_chats.setTextSize((float) (height / 80));
         }
+        OpenHelper openHelper = new OpenHelper(getContext(),
+                "op", null, OpenHelper.VERSION);
+        try {
+            Log.e("ALL CHAT ID", "ID: " + openHelper.findAllChatId().toString());
+        }catch (Exception e){
+            Log.e("FIND ALL CHAT ID", e.getMessage());
+        }
         String curTime = new SimpleDateFormat(
                 "HH:mm:ss:mm", Locale.getDefault()).format(new Date());
         Log.e(curTime, "СОЗДАНИЕ ФРАГМЕНТА");
         RecyclerView recyclerView = getActivity().findViewById(R.id.rec_listOfChats);
-        ChatListArrayAdapter chatListArrayAdaptor = new ChatListArrayAdapter(getContext(),
+        chatListArrayAdaptor = new ChatListArrayAdapter(getContext(),
                 ListOfChatsFragment.this, getArguments().getString("LOG"));
         recyclerView.setAdapter(chatListArrayAdaptor);
         ImageView bt_prof;

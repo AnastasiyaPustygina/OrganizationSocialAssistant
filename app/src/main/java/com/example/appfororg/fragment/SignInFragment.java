@@ -1,9 +1,12 @@
 package com.example.appfororg.fragment;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +29,8 @@ public class SignInFragment extends Fragment {
     private final int height  = Resources.getSystem().getDisplayMetrics().heightPixels;
     private final int width  = Resources.getSystem().getDisplayMetrics().widthPixels;
     private float scale = Resources.getSystem().getDisplayMetrics().density;
+    public static final String APP_PREFERENCES = "my_pref";
+    public static SharedPreferences sharedPreferences;
 
     @Nullable
     @Override
@@ -38,7 +43,15 @@ public class SignInFragment extends Fragment {
    @Override
     public void onStart() {
         super.onStart();
+       sharedPreferences = getContext().getSharedPreferences
+               (APP_PREFERENCES, Context.MODE_PRIVATE);
         OpenHelper openHelper = new OpenHelper(getContext(), "op", null, OpenHelper.VERSION);
+       Log.e("ORGANIZATIONS", openHelper.findAllOrganizations().toString());
+       try {
+           Log.e("CHATS", openHelper.findAllChatId() + "");
+       }catch (Exception e){
+           Log.e("CHATS", e.getMessage());
+       }
        TextView checking = getActivity().findViewById(R.id.tv_check);
         ed_data = getActivity().findViewById(R.id.ed_signIn_data);
         ed_pass = getActivity().findViewById(R.id.ed_signIn_pass);

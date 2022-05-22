@@ -26,6 +26,7 @@
             app:layout_constraintWidth_percent="0.6"
             android:layout_gravity="top"
             android:src="@drawable/ava"
+            android:background="@color/white1"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"

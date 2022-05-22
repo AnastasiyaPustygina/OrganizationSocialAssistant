@@ -36,6 +36,7 @@
                             android:layout_height="0dp"
                             android:adjustViewBounds="true"
                             android:baselineAligned="false"
+
                             android:src="@drawable/blue_arrow_back"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
@@ -75,6 +76,7 @@
                             android:layout_height="0dp"
                             android:layout_gravity="left"
                             android:src="@drawable/ava"
+                            android:background="@color/white1"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintHeight_percent="1"

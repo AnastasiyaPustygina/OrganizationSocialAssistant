@@ -1,5 +1,6 @@
 package com.example.appfororg.fragment;
 
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -25,6 +26,8 @@ import com.example.appfororg.domain.Chat;
 import com.example.appfororg.domain.Message;
 import com.example.appfororg.domain.Organization;
 import com.example.appfororg.rest.AppApiVolley;
+
+import java.io.ByteArrayOutputStream;
 
 public class RegFragment extends Fragment {
 
@@ -179,10 +182,30 @@ public class RegFragment extends Fragment {
                                 address.isEmpty())
                             checking.setText("Не все поля заполнены");
                         else {
-                            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.first_org_ava);
+                            Bitmap bitmap = BitmapFactory.decodeResource(getResources(),
+                                    R.drawable.ava_for_project);
+                            SharedPreferences.Editor editor = SignInFragment.sharedPreferences.edit();
+                            StringBuilder stringBuilder = new StringBuilder();
+                            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                            Bitmap.CompressFormat imFor = Bitmap.CompressFormat.JPEG;
+                            bitmap.compress(imFor, 0, stream);
+                            byte[] photoOrg = stream.toByteArray();
+                            for (int i = 0; i < photoOrg.length - 1; i++) {
+                                stringBuilder.append(String.valueOf(photoOrg[i])).append(" ");
+                            }
+                            stringBuilder.append(String.valueOf(
+                                    photoOrg[photoOrg.length - 1]));
+
+                            editor.putString("org_photo" + address, stringBuilder.toString());
+                            editor.commit();
                             Organization organization = new Organization(
-                                    name, login, type, bitmap, "",
+                                    name, login, type, "",
                                     address, "", linkToWebsite,  pass);
+                            OpenHelper openHelper = new OpenHelper(getContext(),
+                                    "op", null, OpenHelper.VERSION);
+                            openHelper.insertOrg(organization);
+                            Log.e("AFTER_INSERT_ORG",
+                                    openHelper.findOrgByLogin(organization.getName()).toString());
                             new AppApiVolley(getContext()).addOrganization(organization);
                             bt_reg_fr_reg.setOnClickListener((view1) -> {
                                 NavHostFragment.

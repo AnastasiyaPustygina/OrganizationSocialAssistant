@@ -1,5 +1,7 @@
 package com.example.appfororg.domain;
 
+import java.util.Objects;
+
 public class Message {
     private int id;
     private String whose;
@@ -51,5 +53,18 @@ public class Message {
                 ", values='" + values + '\'' +
                 ", time='" + time + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Message message = (Message) o;
+        return chat_id == message.chat_id && Objects.equals(whose, message.whose) && Objects.equals(values, message.values) && Objects.equals(time, message.time);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(whose, chat_id, values, time);
     }
 }

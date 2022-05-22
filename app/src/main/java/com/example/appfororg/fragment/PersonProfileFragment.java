@@ -96,9 +96,7 @@ public class PersonProfileFragment extends Fragment {
         Person person = openHelper.findPersonByLogin(getArguments().getString("NamePer"));
         Bitmap bitmap = BitmapFactory.
                 decodeByteArray(person.getPhotoPer(), 0, person.getPhotoPer().length);
-        RoundedBitmapDrawable roundDrawable = RoundedBitmapDrawableFactory.create(getResources(), bitmap);
-        roundDrawable.setCircular(true);
-        iv_ava.setImageDrawable(roundDrawable);
+        iv_ava.setImageBitmap(bitmap);
 
 
 

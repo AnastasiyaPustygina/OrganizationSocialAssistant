@@ -1,8 +1,14 @@
 package com.example.appfororg.domain;
 
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.util.Log;
+
+import com.example.appfororg.fragment.SignInFragment;
 
 import java.io.ByteArrayOutputStream;
+import java.util.Arrays;
+import java.util.List;
 
 public class Person {
     private int id;
@@ -14,30 +20,43 @@ public class Person {
     private String dateOfBirth;
     private String city;
 
-    public Person(int id, String data, String name,  Bitmap photoPer,
+    public Person(int id, String data, String name,
                   int age, String dateOfBirth, String city) {
         this.id = id;
         if(data.contains("@")) this.email = data;
         else this.telephone = data;
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        Bitmap.CompressFormat imFor = Bitmap.CompressFormat.PNG;
-        photoPer.compress(imFor, 0, stream);
-        this.photoPer = stream.toByteArray();
-        photoPer.recycle();
+        SharedPreferences sharedPreferences = SignInFragment.sharedPreferences;
+        Log.e("IsPrefNull", (sharedPreferences == null) + "");
+        List<String> stringArrayList = Arrays.asList(
+                sharedPreferences.getString("per_photo" + name, "NOT FOUND PREF").split(" "));
+        byte[] byteArray = new byte[stringArrayList.size()];
+        for (int i = 0; i < stringArrayList.size(); i++) {
+            byteArray[i] = Byte.parseByte(stringArrayList.get(i));
+        }
+        this.photoPer = byteArray;
+
+        Log.e("PERSON_PHOTO_IS_NULL", (photoPer == null) + "");
         this.name = name;
         this.age = age;
         this.dateOfBirth = dateOfBirth;
         this.city = city;
     }
 
-    public Person(String data, String name, int age, Bitmap photoPer, String dateOfBirth,
+    public Person(String data, String name, int age, String dateOfBirth,
                   String city) {
         if(data.contains("@")) this.email = data;
         else this.telephone = data;
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        Bitmap.CompressFormat imFor = Bitmap.CompressFormat.PNG;
-        photoPer.compress(imFor, 0, stream);
-        this.photoPer = stream.toByteArray();
+        SharedPreferences sharedPreferences = SignInFragment.sharedPreferences;
+        Log.e("IsPrefNull", (sharedPreferences == null) + "");
+        List<String> stringArrayList = Arrays.asList(
+                sharedPreferences.getString("per_photo" + name, "NOT FOUND PREF").split(" "));
+        byte[] byteArray = new byte[stringArrayList.size()];
+        for (int i = 0; i < stringArrayList.size(); i++) {
+            byteArray[i] = Byte.parseByte(stringArrayList.get(i));
+        }
+        this.photoPer = byteArray;
+
+        Log.e("PERSON_PHOTO_IS_NULL", (photoPer == null) + "");
         this.name = name;
         this.age = age;
         this.dateOfBirth = dateOfBirth;

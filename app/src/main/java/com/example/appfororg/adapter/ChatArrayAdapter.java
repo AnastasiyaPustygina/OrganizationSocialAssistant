@@ -37,7 +37,7 @@ public class ChatArrayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     @Override
     public int getItemViewType(int position) {
-        if(allMsg.get(position).getWhose().equals("me")) return 0;
+        if(allMsg.get(position).getWhose().equals("org")) return 0;
         else return 1;
     }
 

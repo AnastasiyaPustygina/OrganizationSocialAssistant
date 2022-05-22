@@ -1,8 +1,15 @@
 package com.example.appfororg.domain;
 
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.util.Log;
+
+import com.example.appfororg.fragment.SignInFragment;
 
 import java.io.ByteArrayOutputStream;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 
 public class Organization {
     private int id;
@@ -16,17 +23,22 @@ public class Organization {
     private String needs;
     private String linkToWebsite;
 
-    public Organization(String name, String login, String type, Bitmap photoOrg,
+    public Organization(String name, String login, String type,
                         String description, String address,
                         String needs, String linkToWebsite, String pass) {
         this.name = name;
         this.type = type;
         this.login = login;
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        Bitmap.CompressFormat imFor = Bitmap.CompressFormat.PNG;
-        photoOrg.compress(imFor, 0, stream);
-        this.photoOrg = stream.toByteArray();
-        photoOrg.recycle();
+        SharedPreferences sharedPreferences = SignInFragment.sharedPreferences;
+        Log.e("IsPrefNull", (sharedPreferences == null) + "");
+        List<String> stringArrayList = Arrays.asList(
+                sharedPreferences.getString("org_photo" + address, "NOT FOUND PREF").split(" "));
+        byte[] byteArray = new byte[stringArrayList.size()];
+        for (int i = 0; i < stringArrayList.size(); i++) {
+            byteArray[i] = Byte.parseByte(stringArrayList.get(i));
+        }
+        this.photoOrg = byteArray;
+
         this.description = description;
         this.address = address;
         this.needs = needs;
@@ -34,18 +46,25 @@ public class Organization {
         this.pass = pass;
     }
 
-    public Organization(String name, String login, String type, Bitmap photoOrg,
+    public Organization(String name, String login, String type,
                         String description, String address, String needs, String pass) {
         this.name = name;
         this.type = type;
         this.login = login;
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        Bitmap.CompressFormat imFor = Bitmap.CompressFormat.PNG;
-        if(photoOrg!=null)
-        photoOrg.compress(imFor, 0, stream);
-        this.photoOrg = stream.toByteArray();
-        if(photoOrg!=null)
-        photoOrg.recycle();
+        SharedPreferences sharedPreferences = SignInFragment.sharedPreferences;
+        Log.e("IsPrefNull", (sharedPreferences == null) + "");
+        List<String> stringArrayList = Arrays.asList(
+                sharedPreferences.getString("org_photo" + address, "NOT FOUND PREF").split(" "));
+        byte[] byteArray = new byte[stringArrayList.size()];
+        for (int i = 0; i < stringArrayList.size(); i++) {
+            try {
+                byteArray[i] = Byte.parseByte(stringArrayList.get(i));
+            }catch(Exception e){
+                byteArray[i] = 0;
+            }
+        }
+        this.photoOrg = byteArray;
+
         this.description = description;
         this.address = address;
         this.needs = needs;
@@ -53,19 +72,26 @@ public class Organization {
     }
 
     public Organization(int id, String name, String login, String type,
-                        Bitmap photoOrg, String description, String address,
+                         String description, String address,
                         String needs, String linkToWebsite, String pass) {
         this.id = id;
         this.name = name;
         this.type = type;
         this.login = login;
-        if(photoOrg != null) {
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            Bitmap.CompressFormat imFor = Bitmap.CompressFormat.PNG;
-            photoOrg.compress(imFor, 0, stream);
-            this.photoOrg = stream.toByteArray();
-            photoOrg.recycle();
+        SharedPreferences sharedPreferences = SignInFragment.sharedPreferences;
+        Log.e("IsPrefNull", (sharedPreferences == null) + "");
+        List<String> stringArrayList = Arrays.asList(
+                sharedPreferences.getString("org_photo" + address, "NOT FOUND PREF").split(" "));
+        byte[] byteArray = new byte[stringArrayList.size()];
+        for (int i = 0; i < stringArrayList.size(); i++) {
+            try {
+                byteArray[i] = Byte.parseByte(stringArrayList.get(i));
+            }catch(Exception e){
+                byteArray[i] = 0;
+            }
         }
+        this.photoOrg = byteArray;
+
         this.description = description;
         this.address = address;
         this.needs = needs;
@@ -127,4 +153,24 @@ public class Organization {
                 ", linkToWebsite='" + linkToWebsite + '\'' +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Organization that = (Organization) o;
+        return Objects.equals(name, that.name) && Objects.equals(pass, that.pass) &&
+                Objects.equals(login, that.login) && Objects.equals(type, that.type) &&
+                Arrays.equals(photoOrg, that.photoOrg) && Objects.equals(description, that.description)
+                && Objects.equals(address, that.address) && Objects.equals(needs, that.needs) &&
+                Objects.equals(linkToWebsite, that.linkToWebsite);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(name, pass, login, type, description, address, needs, linkToWebsite);
+        result = 31 * result + Arrays.hashCode(photoOrg);
+        return result;
+    }
+
 }
