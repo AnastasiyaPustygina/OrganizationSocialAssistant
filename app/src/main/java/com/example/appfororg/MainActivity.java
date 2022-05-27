@@ -20,6 +20,8 @@ public class MainActivity extends AppCompatActivity {
 
         new AppApiVolley(this).fillChats();
         new AppApiVolley(this).fillMsg();
+        new AppApiVolley(this).fillMsg();
+
 
     }
 }

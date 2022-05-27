@@ -23,9 +23,12 @@ import com.example.appfororg.domain.Person;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 public class ChatListArrayAdapter extends RecyclerView.Adapter<ChatListArrayAdapter.ViewHolder>{
 
@@ -36,12 +39,33 @@ public class ChatListArrayAdapter extends RecyclerView.Adapter<ChatListArrayAdap
     private final int width  = Resources.getSystem().getDisplayMetrics().widthPixels;
     private final int height  = Resources.getSystem().getDisplayMetrics().heightPixels;
     private float scale = Resources.getSystem().getDisplayMetrics().density;
+    private Map<Integer, String> mapListChatIdAndMsg;
+    private ArrayList<Integer> arrayListChatId;
+    private OpenHelper openHelper;
+    private ArrayList<Person> arrayListLastPer;
 
     public ChatListArrayAdapter(Context context, ListOfChatsFragment fragment, String log) {
         this.context = context;
         this.inflater = LayoutInflater.from(context);
         this.fragment = fragment;
         this.log = log;
+        openHelper = new OpenHelper(context, "op", null, OpenHelper.VERSION);
+        try {
+            mapListChatIdAndMsg = openHelper.findLastChatId(log);
+        }catch (CursorIndexOutOfBoundsException e){
+            mapListChatIdAndMsg = new HashMap<>();
+        }
+        arrayListChatId = new ArrayList<>();
+        for (Integer key:
+                mapListChatIdAndMsg.keySet()) {
+            arrayListChatId.add(key);
+        }
+        arrayListLastPer = new ArrayList<>();
+        for (int i = 0; i < mapListChatIdAndMsg.size(); i++) {
+            arrayListLastPer.add(openHelper.findPersonByChatId(arrayListChatId.get(i)));
+        }
+        Collections.reverse(arrayListChatId);
+        Collections.reverse(arrayListLastPer);
     }
 
     @NonNull
@@ -53,41 +77,24 @@ public class ChatListArrayAdapter extends RecyclerView.Adapter<ChatListArrayAdap
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        String curTime = new SimpleDateFormat(
-                "HH:mm:ss:mm", Locale.getDefault()).format(new Date());
-        Log.e(curTime, "НАЧАЛО РАБОТЫ АДАПТЕРА");
-        OpenHelper openHelper = new OpenHelper(context, "op", null, OpenHelper.VERSION);
-        ArrayList<String> arrListLastMsg = openHelper.findLastMsgValuesByOrgLog(log);
-        ArrayList<Integer> arrListChatId = openHelper.findLastChatId(log);
-        Log.e("LastChatId", arrListChatId.toString());
-        Log.e("LastMSG", arrListLastMsg.toString());
 
-        curTime = new SimpleDateFormat(
-                "HH:mm:ss:mm", Locale.getDefault()).format(new Date());
-        Log.e(curTime, "ПОСЛЕ ПОЛУЧЕНИЯ ПОСЛЕДНИХ СОО И ЧАТОВ");
-        ArrayList<Person> arrayListLastPer = new ArrayList<>();
-        for (int i = 0; i < arrListChatId.size(); i++) {
-                arrayListLastPer.add(openHelper.findPersonByChatId(arrListChatId.get(i)));
-        }
-        curTime = new SimpleDateFormat(
-                "HH:mm:ss:mm", Locale.getDefault()).format(new Date());
-        Log.e(curTime, "ПОСЛЕ СОЗДАНИЯ ЛИСТА ЛЮДЕЙ");
+
         try {
-        Collections.reverse(arrayListLastPer);
             holder.ivPerAva.setImageBitmap(BitmapFactory.decodeByteArray(arrayListLastPer.get
                             (position).getPhotoPer(), 0,
                     arrayListLastPer.get(position).getPhotoPer().length));
-            holder.lastMsg.setText(arrListLastMsg.get(position));
+            holder.lastMsg.setText(mapListChatIdAndMsg.get(arrayListChatId.get(position)));
             holder.tvNamePer.setText(arrayListLastPer.get(position).getName());
-            curTime = new SimpleDateFormat(
-                    curTime, Locale.getDefault()).format(new Date());
-            Log.e("FOURTH", "ПОСЛЕ ПОМЕЩЕНИЯ ТЕКСТА");
             Bundle bundle = new Bundle();
-            bundle.putString("LOG", log);
-            bundle.putString("NamePer", arrayListLastPer.get(arrayListLastPer.size() - position - 1).getName());
             holder.itemView.setOnClickListener(new View.OnClickListener() {
+
                 @Override
                 public void onClick(View view) {
+
+                    bundle.putString("LOG", log);
+                    bundle.putString("NamePer", holder.tvNamePer.getText().toString());
+                    Log.e("OCL_CHATLISTADAPT", bundle.getString("NamePer"));
+
                     holder.itemView.setOnClickListener((view1) -> {
                         NavHostFragment.
                                 findNavController(fragment).navigate(

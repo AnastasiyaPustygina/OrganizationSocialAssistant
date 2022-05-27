@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 
 import com.example.appfororg.R;
 import com.example.appfororg.domain.Person;
@@ -22,24 +23,21 @@ public class PersonMapper {
     public static Person personFromJson(JSONObject jsonObject, Context context) {
         Person person = null;
         try {
-            String data = jsonObject.getString("telephone").isEmpty() ?
-                    jsonObject.getString("email") : jsonObject.getString("telephone");
-//            List<String> stringArrayList = Arrays.asList(
-//                    jsonObject.getString("photo").split(" "));
-//            byte[] byteArray = new byte[stringArrayList.size()];
-//            try {
-//                for (int i = 0; i < stringArrayList.size(); i++) {
-//                    byteArray[i] = Byte.valueOf(stringArrayList.get(i));
-//                }
-//            }catch (Exception e){
-//                Bitmap photoPer = BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_channel);
-//                ByteArrayOutputStream stream = new ByteArrayOutputStream();
-//                Bitmap.CompressFormat imFor = Bitmap.CompressFormat.PNG;
-//                photoPer.compress(imFor, 0, stream);
-//                byteArray = stream.toByteArray();
-//
-//            }
-//            Bitmap bitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+            Log.e("PersonMapper", jsonObject.getString("telephone") + jsonObject.getString("email"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            String data = jsonObject.getString("telephone");
+            if(data.isEmpty() ||
+                    data.equals("null")) {
+                Log.e(data, jsonObject.getString("email"));
+                data = jsonObject.getString("email");
+            }else {
+                Log.e(data, jsonObject.getString("telephone"));
+                data = jsonObject.getString("telephone");
+            }
+            Log.e("data", data);
             SharedPreferences sharedPreferences = SignInFragment.sharedPreferences;
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putString("per_photo" + jsonObject.getString("name"),

@@ -3,10 +3,7 @@ package com.example.appfororg.fragment;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,27 +35,22 @@ public class SignInFragment extends Fragment {
         return inflater.inflate(R.layout.sign_in_fragment, container, false);
     }
 
-
-
    @Override
     public void onStart() {
         super.onStart();
        sharedPreferences = getContext().getSharedPreferences
                (APP_PREFERENCES, Context.MODE_PRIVATE);
         OpenHelper openHelper = new OpenHelper(getContext(), "op", null, OpenHelper.VERSION);
-       Log.e("ORGANIZATIONS", openHelper.findAllOrganizations().toString());
-       try {
-           Log.e("CHATS", openHelper.findAllChatId() + "");
-       }catch (Exception e){
-           Log.e("CHATS", e.getMessage());
-       }
        TextView checking = getActivity().findViewById(R.id.tv_check);
         ed_data = getActivity().findViewById(R.id.ed_signIn_data);
         ed_pass = getActivity().findViewById(R.id.ed_signIn_pass);
         btSignIn = getActivity().findViewById(R.id.bt_signIn_fr_signIn);
         btReg = getActivity().findViewById(R.id.bt_reg_fr_signIn);
+
+       String pass = openHelper.findPassByLogin(ed_data.getText().toString());
+
        int data = Math.max(width, height);
-       int size70 = (int) (scale * (data / 23) + 0.5f);
+       int size70 = (int) (scale * (data / 18) + 0.5f);
        int size10 = (int) (scale * (data / 140) + 0.5f);
        int size60 = (int) (scale * (data / 30) + 0.5f);
        int size30 = (int) (scale * (data / 70) + 0.5f);
@@ -112,15 +104,6 @@ public class SignInFragment extends Fragment {
                     else if (ed_pass.getText().toString().equals(
                             openHelper.findPassByLogin(ed_data.getText().toString()))) {
                         Bundle bundle = new Bundle();
-                               Bitmap bitmap1 = BitmapFactory.decodeResource(getResources(), R.drawable.ic_channel);
-//       openHelper.insertPerson(new Person("ThisIsData", "NameOfPerson",
-//               19, bitmap1, "ThisIsDate", "ForExample...Voronezh"));
-//       Chat chat = new Chat(2, openHelper.findOrgByLogin(ed_data.getText().toString()).getId());
-//       openHelper.insertChat(chat);
-//       openHelper.insertMsg(new Message("person",
-//               openHelper.findChatIdByOrgIdAndPerId(openHelper.findOrgByLogin(ed_data.getText().toString()).getId(), 2), "Здравствуйте", "13:52"));
-
-
                         bundle.putString("LOG", ed_data.getText().toString());
                         btSignIn.setOnClickListener((view1) -> {
                             NavHostFragment.findNavController(SignInFragment.this).navigate(

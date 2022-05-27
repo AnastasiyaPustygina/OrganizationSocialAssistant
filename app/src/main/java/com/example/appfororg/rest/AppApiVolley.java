@@ -27,6 +27,7 @@ import com.example.appfororg.domain.Organization;
 import com.example.appfororg.domain.mapper.ChatMapper;
 import com.example.appfororg.domain.mapper.MessageMapper;
 import com.example.appfororg.domain.mapper.OrganizationMapper;
+import com.example.appfororg.fragment.ChatFragment;
 import com.example.appfororg.fragment.ListOfChatsFragment;
 import com.example.appfororg.fragment.SignInFragment;
 import com.google.gson.Gson;
@@ -39,12 +40,13 @@ import java.io.ByteArrayOutputStream;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
-public class AppApiVolley implements AppApi{
+public class AppApiVolley implements AppApi {
 
     public static final String API_TEST = "API_TEST";
     private final Context context;
-    public static final String BASE_URL = "http://192.168.1.33:8081";
+    public static final String BASE_URL = "http://192.168.1.35:8081";
     private Response.ErrorListener errorListener;
 
 
@@ -65,33 +67,33 @@ public class AppApiVolley implements AppApi{
 
         JSONObject params = new JSONObject();
         try {
-                    params.put("id", organization.getId());
-                    params.put("name", organization.getName());
-                    params.put("type", organization.getType());
+            params.put("id", organization.getId());
+            params.put("name", organization.getName());
+            params.put("type", organization.getType());
             SharedPreferences sharedPreferences = SignInFragment.sharedPreferences;
 
             params.put("organizationPhoto", sharedPreferences.getString("org_photo" +
-                            organization.getAddress(), "CANNOT_FIND_ORG_PHOTO_PREF"));
-                    params.put("description", organization.getDescription());
-                    params.put("address", organization.getAddress());
-                    params.put("needs", organization.getNeeds());
-                    params.put("linkToWebsite", organization.getLinkToWebsite());
+                    organization.getAddress(), "CANNOT_FIND_ORG_PHOTO_PREF"));
+            params.put("description", organization.getDescription());
+            params.put("address", organization.getAddress());
+            params.put("needs", organization.getNeeds());
+            params.put("linkToWebsite", organization.getLinkToWebsite());
         } catch (JSONException e) {
             Log.e("API_TASK", e.getMessage());
         }
 
-            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-                    Request.Method.POST, url, params, new Response.Listener<JSONObject>() {
-                @Override
-                public void onResponse(JSONObject response) {
-                    OpenHelper openHelper = new OpenHelper(context,
-                            "op", null, OpenHelper.VERSION);
-                    if(!openHelper.findAllOrganizations().contains(organization))
-                        openHelper.insertOrg(organization);
-                    Log.d(API_TEST, response.toString());
-                }
-            }, errorListener
-            );
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.POST, url, params, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                OpenHelper openHelper = new OpenHelper(context,
+                        "op", null, OpenHelper.VERSION);
+                if (!openHelper.findAllOrganizations().contains(organization))
+                    openHelper.insertOrg(organization);
+                Log.d(API_TEST, response.toString());
+            }
+        }, errorListener
+        );
         RequestQueue referenceQueue = Volley.newRequestQueue(context);
         referenceQueue.add(jsonObjectRequest);
     }
@@ -102,7 +104,7 @@ public class AppApiVolley implements AppApi{
                                    byte[] photoOrg, String description, String address, String needs,
                                    String linkToWebsite, String pass) {
         String url = BASE_URL + "/organization/" + id;
-        Log.e("UPDATE_ORG", ""+id+" "+name+login+type+description+address+needs+linkToWebsite+pass);
+        Log.e("UPDATE_ORG", "" + id + " " + name + login + type + description + address + needs + linkToWebsite + pass);
         RequestQueue referenceQueue = Volley.newRequestQueue(context);
         StringRequest stringRequest = new StringRequest(Request.Method.PUT,
                 url,
@@ -122,7 +124,7 @@ public class AppApiVolley implements AppApi{
                         Log.e("AFTER_UPDATE_ORG_PHOTO", photo);
                     }
                 },
-                errorListener){
+                errorListener) {
             @Nullable
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
@@ -130,7 +132,7 @@ public class AppApiVolley implements AppApi{
                 params.put("name", name);
                 params.put("type", type);
                 SharedPreferences sharedPreferences = SignInFragment.sharedPreferences;
-                params.put("organizationPhoto",  sharedPreferences.getString("org_photo" +
+                params.put("organizationPhoto", sharedPreferences.getString("org_photo" +
                         address, "CANNOT_FIND_ORG_PHOTO_PREF"));
                 params.put("description", description);
                 params.put("address", address);
@@ -140,7 +142,6 @@ public class AppApiVolley implements AppApi{
             }
         };
         referenceQueue.add(stringRequest);
-
 
 
     }
@@ -159,6 +160,7 @@ public class AppApiVolley implements AppApi{
                         OpenHelper openHelper = new OpenHelper(context,
                                 "op", null, OpenHelper.VERSION);
                         openHelper.deleteAllChat();
+                        openHelper.deleteAllPeople();
                         Log.e("API_TEST_FILL_CHAT", response.length() + "");
                         try {
                             for (int i = 0; i < response.length(); i++) {
@@ -168,11 +170,11 @@ public class AppApiVolley implements AppApi{
                                 Log.e("FILL CHAT", chat.toString());
                                 try {
                                     Log.e("AFTER FILL CHAT", openHelper.findAllChatId().toString());
-                                }catch (Exception e){
+                                } catch (Exception e) {
                                     Log.e("AFTER FILL CHAT", e.getMessage());
                                 }
                             }
-                        }catch (JSONException e) {
+                        } catch (JSONException e) {
                             Log.e("API_TEST", e.getMessage());
                         }
                     }
@@ -198,7 +200,7 @@ public class AppApiVolley implements AppApi{
         referenceQueue.add(stringRequest);
     }
 
-//    @Override
+    //    @Override
 //    public void fillMessageByChatId(int chat_id) {
 //        String url = BASE_URL + "/chat/" + chat_id + "/message";
 //        RequestQueue referenceQueue = Volley.newRequestQueue(context);
@@ -234,41 +236,42 @@ public class AppApiVolley implements AppApi{
 //                errorListener);
 //        referenceQueue.add(jsonArrayRequest);
 //    }
-@Override
-public void fillMsg() {
-    String url = BASE_URL + "/message";
-    RequestQueue referenceQueue = Volley.newRequestQueue(context);
-    JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
-            Request.Method.GET,
-            url,
-            null,
-            new Response.Listener<JSONArray>() {
-                @Override
-                public void onResponse(JSONArray response) {
-                    OpenHelper openHelper = new OpenHelper(context,
-                            "op", null, OpenHelper.VERSION);
-                    openHelper.deleteAllMessage();
-                    Log.e("API_TEST_FILL_MSG", response.length() + "");
-                    try {
-                        for (int i = 0; i < response.length(); i++) {
-                            JSONObject jsonObject = response.getJSONObject(i);
-                            Message message = MessageMapper.messageFromJson(jsonObject, context);
-                            openHelper.insertMsg(message);
-                            Log.e("FILL MSG", message.toString());
-                            try {
-                                Log.e("AFTER FILL MSG", openHelper.findAllMsgVal().toString());
-                            }catch (Exception e){
-                                Log.e("AFTER FILL MSG", e.getMessage());
+    @Override
+    public void fillMsg() {
+        String url = BASE_URL + "/message";
+        RequestQueue referenceQueue = Volley.newRequestQueue(context);
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
+                Request.Method.GET,
+                url,
+                null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        OpenHelper openHelper = new OpenHelper(context,
+                                "op", null, OpenHelper.VERSION);
+                        openHelper.deleteAllMessage();
+                        Log.e("API_TEST_FILL_MSG", response.length() + "");
+                        try {
+                            for (int i = 0; i < response.length(); i++) {
+                                JSONObject jsonObject = response.getJSONObject(i);
+                                Message message = MessageMapper.messageFromJson(jsonObject, context);
+                                openHelper.insertMsg(message);
+                                Log.e("FILL MSG", message.toString());
+                                try {
+                                    Log.e("AFTER FILL MSG", openHelper.findAllMsgVal().toString());
+                                } catch (Exception e) {
+                                    Log.e("AFTER FILL MSG", e.getMessage());
+                                }
                             }
+                        } catch (JSONException e) {
+                            Log.e("API_TEST", e.getMessage());
                         }
-                    }catch (JSONException e) {
-                        Log.e("API_TEST", e.getMessage());
                     }
-                }
-            },
-            errorListener);
-    referenceQueue.add(jsonArrayRequest);
-}
+                },
+                errorListener);
+        referenceQueue.add(jsonArrayRequest);
+    }
+
     @Override
     public void addMessages(Message message) {
         String url = BASE_URL + "/message";
@@ -281,7 +284,7 @@ public void fillMsg() {
                         Log.d("API_TEST_ADD_MSG", response);
                     }
                 },
-                errorListener){
+                errorListener) {
             @Nullable
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
@@ -296,7 +299,7 @@ public void fillMsg() {
                         "!" + chat.getPerson().getCity() + "!" +
                         sharedPreferences.getString("per_photo" + chat.getPerson().getName()
                                 , "FILL_CHAT_CANNOT_PERSON_PHOTO")
-                        + "!" + chat.getPerson().getDateOfBirth() + "!"+
+                        + "!" + chat.getPerson().getDateOfBirth() + "!" +
                         chat.getPerson().getAge();
                 String orgStr = chat.getOrganization().getId() + "!" + chat.getOrganization().getName()
                         + "!" + chat.getOrganization().getType() + "!" +
@@ -317,6 +320,26 @@ public void fillMsg() {
             }
         };
         Log.e("INSERT MESSAGE", message.toString());
+        referenceQueue.add(stringRequest);
+    }
+
+    @Override
+    public void checkNewMsg() {
+        String url = BASE_URL + "/message/size";
+        RequestQueue referenceQueue = Volley.newRequestQueue(context);
+        StringRequest stringRequest = new StringRequest(Request.Method.GET,
+                url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                int size = Integer.parseInt(response);
+                OpenHelper openHelper = new OpenHelper(context, "op",
+                        null, OpenHelper.VERSION);
+                if(openHelper.findAllMsg().size() != size){
+                    fillMsg();
+
+                }
+            }
+        }, errorListener);
         referenceQueue.add(stringRequest);
     }
 }

@@ -18,7 +18,9 @@ import com.example.appfororg.domain.Organization;
 import com.example.appfororg.domain.Person;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class OpenHelper extends SQLiteOpenHelper {
     public static final String TABLE_PERSON_NAME = "person";
@@ -160,7 +162,6 @@ public class OpenHelper extends SQLiteOpenHelper {
     public long insertOrg(Organization org) {
         int idOrg = sharedPreferences.getInt("org_id", -1000);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        Log.e("CHECK", findAllOrganizations().size() + " " + idOrg);
         if(findAllOrganizations().size() == idOrg - 1)
         editor.putInt("org_id", idOrg + 1);
         editor.commit();
@@ -213,6 +214,14 @@ public class OpenHelper extends SQLiteOpenHelper {
         editor.commit();
         SQLiteDatabase mDataBase = getWritableDatabase();
         mDataBase.delete(TABLE_CHAT_NAME, null, null);
+    }
+    public void deleteAllPeople() {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.remove("per_id");
+        editor.putInt("per_id", 1);
+        editor.commit();
+        SQLiteDatabase mDataBase = getWritableDatabase();
+        mDataBase.delete(TABLE_PERSON_NAME, null, null);
     }
     public void deleteAllMessage() {
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -353,8 +362,6 @@ public class OpenHelper extends SQLiteOpenHelper {
         do {
             int currentChatId = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_CHAT_ID));
             int perId = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_PERSON_CHAT_ID));
-            Log.e("findPersonByChatId", perId + "");
-            Log.e("AllPerFindPerByChatId", findAllPeople().toString());
 
             if(currentChatId == chat_id) return findPersonById(perId);
         }while (cursor.moveToNext());
@@ -399,8 +406,8 @@ public class OpenHelper extends SQLiteOpenHelper {
         return chatIdArr;
     }
 
-    public ArrayList<Integer> findLastChatId(String login){
-        ArrayList<Integer> arr_chat_id = new ArrayList<>();
+    public Map<Integer, String> findLastChatId(String login){
+        Map<Integer, String> arr_chat_id = new HashMap<>();
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.query(TABLE_MSG_NAME,
                 null,
@@ -413,14 +420,11 @@ public class OpenHelper extends SQLiteOpenHelper {
         do {
             Integer chatId = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_MSG_CHAT_ID));
             String log = findOrgByChatId(chatId).getLogin();
+            String val = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_MSG_VALUE));
             if(log == null) continue;
             if(log.equals(login)) {
-                if (arr_chat_id.contains((Object) chatId)) {
-                    arr_chat_id.remove((Object) chatId);
-                    arr_chat_id.add(chatId);
-                } else {
-                    arr_chat_id.add(chatId);
-                }
+                    arr_chat_id.remove(chatId);
+                    arr_chat_id.put(chatId ,val);
             }
         }while (cursor.moveToNext());
         return arr_chat_id;
@@ -566,6 +570,7 @@ public class OpenHelper extends SQLiteOpenHelper {
         ArrayList<Organization> arrOrg = new ArrayList<>();
         SQLiteDatabase db = getReadableDatabase();
         try{
+
             Cursor cursor = db.query(TABLE_ORG_NAME,
                     null,
                     null,
@@ -583,34 +588,24 @@ public class OpenHelper extends SQLiteOpenHelper {
             int columnAddressIndex = cursor.getColumnIndex(COLUMN_ADDRESS);
             int columnNeedsIndex = cursor.getColumnIndex(COLUMN_NEEDS);
             int columnLinkIndex = cursor.getColumnIndex(COLUMN_LINKWEB);
-            Log.e("FindAllOrg1", "1");
-            Log.e("FindAllOrg1",  "" + (cursor.getInt(columnIdIndex) == 0));
 
             do {
                 int id = cursor.getInt(columnIdIndex);
-                Log.e("FindAllOrg1", "2");
                 String pass = cursor.getString(columnPassIndex);
-                Log.e("FindAllOrg1", "3");
                 String log = cursor.getString(columnLogIndex);
-                Log.e("FindAllOrg1", "4");
                 String name = cursor.getString(columnNameIndex);
-                Log.e("FindAllOrg1", "5");
                 String type = cursor.getString(columnTypeIndex);
-                Log.e("FindAllOrg1", "6");
                 String desc = cursor.getString(columnDescIndex);
-                Log.e("FindAllOrg1", "7");
                 String address = cursor.getString(columnAddressIndex);
-                Log.e("FindAllOrg1", "8");
                 String needs = cursor.getString(columnNeedsIndex);
-                Log.e("FindAllOrg1", "9");
                 String link = cursor.getString(columnLinkIndex);
-                Log.e("FindAllOrg1", "" + id + " " + name + " " + log + " " + type + " " +
-                        desc + " " +address + " " +needs + " " +link + " " +pass);
                 arrOrg.add(new Organization(id, name, log, type,
                         desc, address, needs, link, pass));
-            }while (cursor.moveToNext());} catch (CursorIndexOutOfBoundsException e){
-            Log.e("MY_LOG", "нулевой findAllOrg");
-        };
+            }while (cursor.moveToNext());
+
+        } catch (CursorIndexOutOfBoundsException e){
+            Log.e("MY_LOG", "нулевой findAllOrg");};
+
         return arrOrg;
 
     }

@@ -30,7 +30,6 @@ public class Organization {
         this.type = type;
         this.login = login;
         SharedPreferences sharedPreferences = SignInFragment.sharedPreferences;
-        Log.e("IsPrefNull", (sharedPreferences == null) + "");
         List<String> stringArrayList = Arrays.asList(
                 sharedPreferences.getString("org_photo" + address, "NOT FOUND PREF").split(" "));
         byte[] byteArray = new byte[stringArrayList.size()];
@@ -52,7 +51,6 @@ public class Organization {
         this.type = type;
         this.login = login;
         SharedPreferences sharedPreferences = SignInFragment.sharedPreferences;
-        Log.e("IsPrefNull", (sharedPreferences == null) + "");
         List<String> stringArrayList = Arrays.asList(
                 sharedPreferences.getString("org_photo" + address, "NOT FOUND PREF").split(" "));
         byte[] byteArray = new byte[stringArrayList.size()];
@@ -79,7 +77,6 @@ public class Organization {
         this.type = type;
         this.login = login;
         SharedPreferences sharedPreferences = SignInFragment.sharedPreferences;
-        Log.e("IsPrefNull", (sharedPreferences == null) + "");
         List<String> stringArrayList = Arrays.asList(
                 sharedPreferences.getString("org_photo" + address, "NOT FOUND PREF").split(" "));
         byte[] byteArray = new byte[stringArrayList.size()];
@@ -141,6 +138,7 @@ public class Organization {
 
     @Override
     public String toString() {
+
         return "Organization{" +
                 "id=" + id +
                 ", name='" + name + '\'' +

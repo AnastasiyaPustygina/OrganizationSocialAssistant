@@ -21,22 +21,7 @@ public class OrganizationMapper {
     public static Organization organizationFromJson(JSONObject jsonObject, Context context) {
         Organization organization = null;
         try {
-//            List<String> stringArrayList = Arrays.asList(
-//                    jsonObject.getString("organizationPhoto").split(" "));
-//            byte[] byteArray = new byte[stringArrayList.size()];
-//            try {
-//                for (int i = 0; i < stringArrayList.size(); i++) {
-//                    byteArray[i] = Byte.valueOf(stringArrayList.get(i));
-//                }
-//            }catch (Exception e){
-//                Bitmap photoOrg = BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_channel);
-//                ByteArrayOutputStream stream = new ByteArrayOutputStream();
-//                Bitmap.CompressFormat imFor = Bitmap.CompressFormat.PNG;
-//                photoOrg.compress(imFor, 0, stream);
-//                byteArray = stream.toByteArray();
-//
-//            }
-//            Bitmap bitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+
             SharedPreferences sharedPreferences = SignInFragment.sharedPreferences;
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putString("org_photo" + jsonObject.getString("address"),

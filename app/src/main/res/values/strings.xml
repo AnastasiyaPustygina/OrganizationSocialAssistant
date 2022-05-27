@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">AppForOrg</string>
+    <string name="app_name">Organization Social Assistant</string>
     <string name="ed_log"><font size="15">Введите логин</font></string>
     <string name="ed_name"><font size="15">Введите название организации</font></string>
     <string name="ed_pas"><font size="15">Введите пароль</font></string>

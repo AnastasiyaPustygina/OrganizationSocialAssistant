@@ -98,14 +98,6 @@ public class PersonProfileFragment extends Fragment {
                 decodeByteArray(person.getPhotoPer(), 0, person.getPhotoPer().length);
         iv_ava.setImageBitmap(bitmap);
 
-
-
-
-
-
-
-
-
         iv_arrow_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -117,7 +109,6 @@ public class PersonProfileFragment extends Fragment {
                             findNavController(PersonProfileFragment.this).navigate(
                             R.id.action_personProfileFragment_to_chatFragment, bundleLog);
                 });
-                Log.e("НАЖАТИЕ", "ПЕРЕХОД В ЧАТЫ");
                 iv_arrow_back.performClick();
             }
         });

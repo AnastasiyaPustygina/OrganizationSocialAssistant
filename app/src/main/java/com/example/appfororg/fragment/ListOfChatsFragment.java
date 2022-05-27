@@ -44,13 +44,6 @@ public class ListOfChatsFragment extends Fragment {
         } else {
             tv_chats.setTextSize((float) (height / 80));
         }
-        OpenHelper openHelper = new OpenHelper(getContext(),
-                "op", null, OpenHelper.VERSION);
-        try {
-            Log.e("ALL CHAT ID", "ID: " + openHelper.findAllChatId().toString());
-        }catch (Exception e){
-            Log.e("FIND ALL CHAT ID", e.getMessage());
-        }
         String curTime = new SimpleDateFormat(
                 "HH:mm:ss:mm", Locale.getDefault()).format(new Date());
         Log.e(curTime, "СОЗДАНИЕ ФРАГМЕНТА");

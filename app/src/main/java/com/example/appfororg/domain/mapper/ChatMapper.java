@@ -15,7 +15,8 @@ public class ChatMapper {
         Person person  =PersonMapper.personFromChatJson(jsonObject, context);
         OpenHelper openHelper = new OpenHelper(context,
                 "op", null, OpenHelper.VERSION);
-        openHelper.insertPerson(person);
+        if(!openHelper.findAllPeople().contains(person))
+            openHelper.insertPerson(person);
         try {
             chat = new Chat(jsonObject.getInt("id"),
                     person,

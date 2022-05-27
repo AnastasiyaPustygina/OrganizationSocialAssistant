@@ -48,7 +48,9 @@ public class RegFragment extends Fragment {
 
     @Override
     public void onStart() {
+
         super.onStart();
+
         radioGroup = getActivity().findViewById(R.id.rg_reg);
         hospice = getActivity().findViewById(R.id.rbt_reg_hospice);
         nursingHome = getActivity().findViewById(R.id.rbt_reg_nursingHome);
@@ -198,14 +200,13 @@ public class RegFragment extends Fragment {
 
                             editor.putString("org_photo" + address, stringBuilder.toString());
                             editor.commit();
+                            if(linkToWebsite.isEmpty()) linkToWebsite = "(не указан)";
                             Organization organization = new Organization(
                                     name, login, type, "",
                                     address, "", linkToWebsite,  pass);
                             OpenHelper openHelper = new OpenHelper(getContext(),
                                     "op", null, OpenHelper.VERSION);
                             openHelper.insertOrg(organization);
-                            Log.e("AFTER_INSERT_ORG",
-                                    openHelper.findOrgByLogin(organization.getName()).toString());
                             new AppApiVolley(getContext()).addOrganization(organization);
                             bt_reg_fr_reg.setOnClickListener((view1) -> {
                                 NavHostFragment.

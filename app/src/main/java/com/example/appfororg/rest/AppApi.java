@@ -11,6 +11,7 @@ public interface AppApi {
                             byte[] photoOrg, String description, String address,
                             String needs, String linkToWebsite, String pass);
     void fillChats();
+    void checkNewMsg();
     void deleteChatById(int id);
 //    void fillMessageByChatId(int chat_id);
     void fillMsg();

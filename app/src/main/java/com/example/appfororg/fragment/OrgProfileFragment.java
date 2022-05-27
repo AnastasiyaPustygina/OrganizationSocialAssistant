@@ -63,8 +63,6 @@ public class OrgProfileFragment extends Fragment {
                     public void onActivityResult(Uri result) {
                         OpenHelper openHelper = new OpenHelper(getContext(), "op",
                                 null, OpenHelper.VERSION);
-                        Log.e("All_Org", openHelper.findAllOrganizations().toString());
-                        Log.e("NameOrg", getArguments().getString("LOG"));
 
                         Organization organization = openHelper.findOrgByLogin(
                                 getArguments().getString("LOG"));
@@ -85,9 +83,6 @@ public class OrgProfileFragment extends Fragment {
                             Log.e("DOWNLOAD IMAGES","Cannot to use a recycled bitmap");
                         }
 
-
-                        Log.e("BEFORE_CHANGE_PHOTO", Arrays.toString(photoOrg));
-
                         SharedPreferences.Editor editor = sharedPreferences.edit();
                         StringBuilder stringBuilder = new StringBuilder();
                         for (int i = 0; i < photoOrg.length - 1; i++) {
@@ -98,9 +93,6 @@ public class OrgProfileFragment extends Fragment {
 
                         editor.putString("org_photo" + organization.getAddress(), stringBuilder.toString());
                         editor.commit();
-
-                        Log.e("AFTER_CHANGE_PHOTO", sharedPreferences.getString
-                                ("org_photo" + organization.getAddress(),"noPrefPhoto"));
 
                         new AppApiVolley(getContext()).updateOrganization(
                                 organization.getId(), organization.getName(), organization.getLogin(),

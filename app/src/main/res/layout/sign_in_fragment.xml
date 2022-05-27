@@ -44,6 +44,7 @@
         android:textColor="@color/purple_700"
         android:id="@+id/ed_signIn_pass"
         android:layout_width="match_parent"
+        android:inputType="textPassword"
         android:layout_height="wrap_content"
         android:textSize="15sp"
         android:background="@drawable/for_ed_text"

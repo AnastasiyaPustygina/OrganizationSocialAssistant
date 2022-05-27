@@ -1,5 +1,6 @@
 package com.example.appfororg.fragment;
 
+import android.content.Context;
 import android.content.res.Resources;
 import android.database.CursorIndexOutOfBoundsException;
 import android.graphics.BitmapFactory;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
@@ -25,6 +27,7 @@ import com.example.appfororg.OpenHelper;
 import com.example.appfororg.R;
 import com.example.appfororg.adapter.ChatArrayAdapter;
 import com.example.appfororg.domain.Message;
+import com.example.appfororg.domain.Organization;
 import com.example.appfororg.domain.Person;
 import com.example.appfororg.rest.AppApiVolley;
 
@@ -40,6 +43,7 @@ public class ChatFragment extends Fragment {
     private TextView status;
     private EditText et_msg;
     private ImageView bt_arrow_back;
+    private AppCompatButton bt_update;
     private final int width  = Resources.getSystem().getDisplayMetrics().widthPixels;
     private final int height  = Resources.getSystem().getDisplayMetrics().heightPixels;
     private float scale = Resources.getSystem().getDisplayMetrics().density;
@@ -78,14 +82,13 @@ public class ChatFragment extends Fragment {
         status.setTextSize((float) data / 180);
         status.setPadding(size15, 0, size15, size15);
         ivMicro.setPadding(size5, 0, 0, 0);
-        ImageView clip = getActivity().findViewById(R.id.iv_chat_clip);
-        clip.setPadding(0, 0, size5,0);
 
 
         OpenHelper openHelper = new OpenHelper(getContext(), "op", null, OpenHelper.VERSION);
         int orgId = openHelper.findOrgByLogin(
                 getArguments().getString("LOG")).getId();
-        Person per = openHelper.findPersonByLogin(openHelper.findPersonById(1).getName());
+        Person per = openHelper.findPersonByLogin(openHelper.findPersonByLogin(
+                getArguments().getString("NamePer")).getName());
         ChatArrayAdapter recyclerAdapter;
         RecyclerView rec = getActivity().findViewById(R.id.rec_chat);
         try {
@@ -95,10 +98,35 @@ public class ChatFragment extends Fragment {
             rec.scrollToPosition(openHelper.findMsgByChatId(
                     openHelper.findChatIdByOrgIdAndPerId(per.getId(),orgId)).size() - 1);
         }catch (CursorIndexOutOfBoundsException e){
-            Log.e("TAG1", e.getMessage());}
+            Log.e("CHAT_FRAGMENT", e.getMessage());}
+        bt_update = new AppCompatButton(getContext());
+        bt_update.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                OpenHelper openHelper = new OpenHelper(getContext(), "op", null,
+                        OpenHelper.VERSION);
+                ChatArrayAdapter recyclerAdapter;
+                RecyclerView rec = getActivity().findViewById(R.id.rec_chat);
+                int perId = openHelper.findPersonByLogin(
+                        getArguments().getString("NamePer")).getId();
+                Organization org = openHelper.findOrgByLogin(getArguments().getString("LOG"));
+                recyclerAdapter = new ChatArrayAdapter(getContext(),
+                        ChatFragment.this, openHelper.findChatIdByOrgIdAndPerId(org.getId(), perId));
+                try {
+                    rec.setAdapter(recyclerAdapter);
+                rec.scrollToPosition(openHelper.findMsgByChatId(
+                        openHelper.findChatIdByOrgIdAndPerId(org.getId(), perId)).size() - 1);
+                }catch (Exception e){
+                    Log.e("UPDATE_ADAPTER", e.getMessage());
+                }
+            }
+        });
+        MyChatThread myChatThread = new MyChatThread(getContext());
+        myChatThread.start();
         imOrg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                myChatThread.changeBool();
                 Bundle bundleForFullDesc = new Bundle();
                 bundleForFullDesc.putString("LOG", getArguments().getString("LOG"));
                 bundleForFullDesc.putString("NamePer", getArguments().getString("NamePer"));
@@ -114,6 +142,7 @@ public class ChatFragment extends Fragment {
         bt_arrow_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                myChatThread.changeBool();
                 Bundle bundleLog = new Bundle();
                 bundleLog.putString("LOG", getArguments().getString("LOG"));
                 bt_arrow_back.setOnClickListener((view1) -> {
@@ -128,6 +157,8 @@ public class ChatFragment extends Fragment {
         imOrg.setImageBitmap(BitmapFactory.
                 decodeByteArray(per.getPhotoPer(), 0, per.getPhotoPer().length));
         namePer.setText(per.getName());
+
+
 
         et_msg.addTextChangedListener(new TextWatcher() {
             @Override
@@ -176,6 +207,46 @@ public class ChatFragment extends Fragment {
             }
         });
 
+    }
+    class MyChatThread extends Thread {
+        private Context context;
+        private OpenHelper openHelper;
+        private boolean b = true;
+
+        public MyChatThread(Context context) {
+            this.context = context;
+            openHelper = new OpenHelper(context, "OpenHelder", null, OpenHelper.VERSION);
+        }
+
+        @Override
+        public void run() {
+            while (b) {
+                new AppApiVolley(context).checkNewMsg();
+                try {
+                    sleep(3 * 1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    requireActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                bt_update.performClick();
+                            } catch (Exception e) {
+                                Log.e("UPDATE_ADAPTER", e.getMessage());
+                            }
+                        }
+                    });
+                } catch (Exception e) {
+                    Log.e("UPDATE_ADAPTER", e.getMessage());
+                }
+            }
+        }
+
+        public void changeBool() {
+            b = !b;
+        }
     }
 
 }

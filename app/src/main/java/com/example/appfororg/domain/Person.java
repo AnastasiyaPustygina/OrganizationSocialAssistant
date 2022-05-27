@@ -1,14 +1,12 @@
 package com.example.appfororg.domain;
 
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.util.Log;
 
 import com.example.appfororg.fragment.SignInFragment;
 
-import java.io.ByteArrayOutputStream;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class Person {
     private int id;
@@ -26,7 +24,6 @@ public class Person {
         if(data.contains("@")) this.email = data;
         else this.telephone = data;
         SharedPreferences sharedPreferences = SignInFragment.sharedPreferences;
-        Log.e("IsPrefNull", (sharedPreferences == null) + "");
         List<String> stringArrayList = Arrays.asList(
                 sharedPreferences.getString("per_photo" + name, "NOT FOUND PREF").split(" "));
         byte[] byteArray = new byte[stringArrayList.size()];
@@ -35,7 +32,6 @@ public class Person {
         }
         this.photoPer = byteArray;
 
-        Log.e("PERSON_PHOTO_IS_NULL", (photoPer == null) + "");
         this.name = name;
         this.age = age;
         this.dateOfBirth = dateOfBirth;
@@ -47,7 +43,6 @@ public class Person {
         if(data.contains("@")) this.email = data;
         else this.telephone = data;
         SharedPreferences sharedPreferences = SignInFragment.sharedPreferences;
-        Log.e("IsPrefNull", (sharedPreferences == null) + "");
         List<String> stringArrayList = Arrays.asList(
                 sharedPreferences.getString("per_photo" + name, "NOT FOUND PREF").split(" "));
         byte[] byteArray = new byte[stringArrayList.size()];
@@ -56,7 +51,6 @@ public class Person {
         }
         this.photoPer = byteArray;
 
-        Log.e("PERSON_PHOTO_IS_NULL", (photoPer == null) + "");
         this.name = name;
         this.age = age;
         this.dateOfBirth = dateOfBirth;
@@ -104,5 +98,20 @@ public class Person {
                 ", dateOfBirth='" + dateOfBirth + '\'' +
                 ", city='" + city + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Person person = (Person) o;
+        return age == person.age && Objects.equals(telephone, person.telephone) && Objects.equals(email, person.email) && Objects.equals(name, person.name) && Arrays.equals(photoPer, person.photoPer) && Objects.equals(dateOfBirth, person.dateOfBirth) && Objects.equals(city, person.city);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(telephone, email, name, age, dateOfBirth, city);
+        result = 31 * result + Arrays.hashCode(photoPer);
+        return result;
     }
 }
