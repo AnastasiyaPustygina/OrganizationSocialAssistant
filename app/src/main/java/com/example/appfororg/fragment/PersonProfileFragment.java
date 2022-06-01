@@ -113,7 +113,7 @@ public class PersonProfileFragment extends Fragment {
             }
         });
         String dataValue;
-        if(person.getTelephone() == null){
+        if(person.getTelephone().isEmpty()){
             tv_forData.setText("Адрес электронной почты: ");
             dataValue = person.getEmail();
         } else{

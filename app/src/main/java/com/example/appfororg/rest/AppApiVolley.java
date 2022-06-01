@@ -46,7 +46,7 @@ public class AppApiVolley implements AppApi {
 
     public static final String API_TEST = "API_TEST";
     private final Context context;
-    public static final String BASE_URL = "http://192.168.1.35:8081";
+    public static final String BASE_URL = "http://192.168.88.19:8081";
     private Response.ErrorListener errorListener;
 
 
@@ -200,42 +200,6 @@ public class AppApiVolley implements AppApi {
         referenceQueue.add(stringRequest);
     }
 
-    //    @Override
-//    public void fillMessageByChatId(int chat_id) {
-//        String url = BASE_URL + "/chat/" + chat_id + "/message";
-//        RequestQueue referenceQueue = Volley.newRequestQueue(context);
-//        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
-//                Request.Method.GET,
-//                url,
-//                null,
-//                new Response.Listener<JSONArray>() {
-//                    @Override
-//                    public void onResponse(JSONArray response) {
-//                        OpenHelper openHelper = new OpenHelper(context,
-//                                "op", null, OpenHelper.VERSION);
-//                        try {
-//                            openHelper.deleteMsgByChatId(chat_id);
-//                        }catch (CursorIndexOutOfBoundsException e){
-//                            Log.e("No message in chat", chat_id + "");
-//                        }
-//                        Message message = null;
-//                        Log.e("API_TEST", response.length() + "");
-//                        try {
-//                            for (int i = 0; i < response.length(); i++) {
-//                                JSONObject jsonObject = response.getJSONObject(i);
-//                                message = MessageMapper.messageFromJson(jsonObject, context);
-//                                openHelper.insertMsg(message);
-//                                Log.e("FILL_OP_MSG", openHelper.findMsgByChatId(chat_id).toString());
-//                            }
-//                        }catch (JSONException e) {
-//                            Log.e("API_TEST_FILL_MSG", e.getMessage());
-//                        }
-//                        if(message != null) Log.e("FILL MSG", message + "");
-//                    }
-//                },
-//                errorListener);
-//        referenceQueue.add(jsonArrayRequest);
-//    }
     @Override
     public void fillMsg() {
         String url = BASE_URL + "/message";
@@ -294,32 +258,39 @@ public class AppApiVolley implements AppApi {
                 Chat chat = openHelper.findChatById(message.getChat_id());
 
                 SharedPreferences sharedPreferences = SignInFragment.sharedPreferences;
-                String personStr = chat.getPerson().getId() + "!" + chat.getPerson().getName() +
-                        "!" + chat.getPerson().getTelephone() + "!" + chat.getPerson().getEmail() +
-                        "!" + chat.getPerson().getCity() + "!" +
-                        sharedPreferences.getString("per_photo" + chat.getPerson().getName()
-                                , "FILL_CHAT_CANNOT_PERSON_PHOTO")
-                        + "!" + chat.getPerson().getDateOfBirth() + "!" +
-                        chat.getPerson().getAge();
-                String orgStr = chat.getOrganization().getId() + "!" + chat.getOrganization().getName()
-                        + "!" + chat.getOrganization().getType() + "!" +
-                        sharedPreferences.getString("org_photo" + chat.getOrganization().getAddress(), "FILL_CHAT_CANNOT_ORG_PHOTO")
-                        + "!" + chat.getOrganization().getDescription() + "!" +
-                        chat.getOrganization().getAddress() + "!" + chat.getOrganization().getNeeds() +
-                        "!" + chat.getOrganization().getLinkToWebsite();
-
                 params.put("id", message.getId() + "");
                 params.put("whose", message.getWhose());
                 params.put("value", message.getValues());
                 params.put("time", message.getTime());
-                params.put("chat_id", message.getChat_id() + "");
-                params.put("strPerson", personStr);
-                params.put("strOrganization", orgStr);
+                params.put("idChat", message.getChat_id() + "");
+                params.put("idPerson", chat.getPerson().getId() + "");
+                params.put("namePerson", chat.getPerson().getName());
 
+                if (chat.getPerson().getTelephone() != null)
+                    params.put("telephonePerson", chat.getPerson().getTelephone());
+                else params.put("telephonePerson", "");
+
+                if (chat.getPerson().getEmail() != null)
+                    params.put("emailPerson", chat.getPerson().getEmail());
+                else params.put("emailPerson", "");
+
+                params.put("cityPerson", chat.getPerson().getCity());
+                params.put("photoPerson", sharedPreferences.getString("per_photo" +
+                        chat.getPerson().getName(), "notPerPhotoInPref"));
+                params.put("dateOfBirthPerson", chat.getPerson().getDateOfBirth());
+                params.put("agePerson", chat.getPerson().getAge() + "");
+                params.put("idOrganization", chat.getOrganization().getId() + "");
+                params.put("nameOrganization", chat.getOrganization().getName());
+                params.put("typeOrganization", chat.getOrganization().getType());
+                params.put("photoOrganization", sharedPreferences.getString("org_photo" +
+                        chat.getOrganization().getAddress(), "notOrgPhotoInPref"));
+                params.put("descriptionOrganization", chat.getOrganization().getDescription());
+                params.put("addressOrganization", chat.getOrganization().getAddress());
+                params.put("needsOrganization", chat.getOrganization().getNeeds());
+                params.put("linkToWebsiteOrganization", chat.getOrganization().getLinkToWebsite());
                 return params;
             }
         };
-        Log.e("INSERT MESSAGE", message.toString());
         referenceQueue.add(stringRequest);
     }
 

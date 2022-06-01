@@ -114,8 +114,8 @@ public class ChatFragment extends Fragment {
                         ChatFragment.this, openHelper.findChatIdByOrgIdAndPerId(org.getId(), perId));
                 try {
                     rec.setAdapter(recyclerAdapter);
-                rec.scrollToPosition(openHelper.findMsgByChatId(
-                        openHelper.findChatIdByOrgIdAndPerId(org.getId(), perId)).size() - 1);
+                    rec.scrollToPosition(openHelper.findMsgByChatId(
+                            openHelper.findChatIdByOrgIdAndPerId(org.getId(), perId)).size() - 1);
                 }catch (Exception e){
                     Log.e("UPDATE_ADAPTER", e.getMessage());
                 }
@@ -179,9 +179,9 @@ public class ChatFragment extends Fragment {
                                 curTime);
 
                         openHelper.insertMsg(myMsg);
-                        ArrayList<Message> messages = openHelper.findMsgByChatId(
-                                openHelper.findChatIdByOrgIdAndPerId(orgId, per.getId()));
-                        new AppApiVolley(getContext()).addMessages(messages.get(messages.size() - 1));
+                        new AppApiVolley(getContext()).addMessages(
+                                openHelper.findLastMessageByChatId(
+                                        openHelper.findChatIdByOrgIdAndPerId(orgId, per.getId())));
                         ChatArrayAdapter recyclerAdapter1 = new ChatArrayAdapter(getContext(),
                                 ChatFragment.this, openHelper.
                                 findChatIdByOrgIdAndPerId(orgId, per.getId()));

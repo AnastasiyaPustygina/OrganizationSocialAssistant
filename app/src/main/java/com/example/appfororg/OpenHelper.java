@@ -163,7 +163,7 @@ public class OpenHelper extends SQLiteOpenHelper {
         int idOrg = sharedPreferences.getInt("org_id", -1000);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         if(findAllOrganizations().size() == idOrg - 1)
-        editor.putInt("org_id", idOrg + 1);
+            editor.putInt("org_id", idOrg + 1);
         editor.commit();
         ContentValues contentValues = new ContentValues();
         contentValues.put(COLUMN_ORGANIZATION_ID, idOrg);
@@ -196,6 +196,31 @@ public class OpenHelper extends SQLiteOpenHelper {
         }while (cursor.moveToNext());
         return 100;
     }
+    public Message findLastMessageByChatId(int chat_id){
+        SQLiteDatabase db = getReadableDatabase();
+        Message message = null;
+        Cursor cursor = db.query(TABLE_MSG_NAME,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null);
+        cursor.moveToFirst();
+        do {
+            String msg = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_MSG_VALUE));
+            int chatId = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_MSG_CHAT_ID));
+            String whose = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_MSG_WHOSE));
+            String time = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_MSG_TIME));
+            int id = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_MSG_ID));
+            if(chatId == chat_id){
+                message = new Message(id, whose, chat_id,
+                        msg, time);
+            }
+        }while (cursor.moveToNext());
+        return message;
+    }
+
     public void deleteAllOrganization() {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.remove("org_id");
@@ -423,8 +448,8 @@ public class OpenHelper extends SQLiteOpenHelper {
             String val = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_MSG_VALUE));
             if(log == null) continue;
             if(log.equals(login)) {
-                    arr_chat_id.remove(chatId);
-                    arr_chat_id.put(chatId ,val);
+                arr_chat_id.remove(chatId);
+                arr_chat_id.put(chatId ,val);
             }
         }while (cursor.moveToNext());
         return arr_chat_id;
