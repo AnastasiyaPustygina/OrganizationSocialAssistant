@@ -295,6 +295,31 @@ public class OpenHelper extends SQLiteOpenHelper {
         return new Organization(-1, null, null, null,
                 null, null, null, null,null);
     }
+    public Organization findOrgByAddress(String addressOrg){
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cur = db.query(TABLE_ORG_NAME, null, null,
+                null, null, null, null);
+        cur.moveToFirst();
+        if(!cur.isAfterLast()){
+            do{
+                int id = cur.getInt(cur.getColumnIndexOrThrow(COLUMN_ORGANIZATION_ID));
+                String name = cur.getString(cur.getColumnIndexOrThrow(COLUMN_ORGNAME));
+                String log = cur.getString(cur.getColumnIndexOrThrow(COLUMN_ORGLOG));
+                String type = cur.getString(cur.getColumnIndexOrThrow(COLUMN_TYPE));
+                String desc = cur.getString(cur.getColumnIndexOrThrow(COLUMN_DESCRIPTION));
+                String address = cur.getString(cur.getColumnIndexOrThrow(COLUMN_ADDRESS));
+                String needs = cur.getString(cur.getColumnIndexOrThrow(COLUMN_NEEDS));
+                String pass = cur.getString(cur.getColumnIndexOrThrow(COLUMN_PASS));
+                String link = cur.getString(cur.getColumnIndexOrThrow(COLUMN_LINKWEB));
+
+                if(log.equals(addressOrg)) {
+                    return new Organization(id, name, log, type, desc, address, needs, link, pass);
+                }
+            }while (cur.moveToNext());
+        }
+        return new Organization(-1, null, null, null,
+                null, null, null, null,null);
+    }
     public void changeDescByLog(String log, String description){
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
         sqLiteDatabase.execSQL("UPDATE " + TABLE_ORG_NAME + " SET " +
@@ -387,7 +412,7 @@ public class OpenHelper extends SQLiteOpenHelper {
         do {
             int currentChatId = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_CHAT_ID));
             int perId = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_PERSON_CHAT_ID));
-
+            Log.e("oh", perId + "");
             if(currentChatId == chat_id) return findPersonById(perId);
         }while (cursor.moveToNext());
         return new Person(1000, null,null,19, null,null);

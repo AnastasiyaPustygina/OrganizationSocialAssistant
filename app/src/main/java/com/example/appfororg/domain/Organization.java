@@ -17,7 +17,7 @@ public class Organization {
     private String pass;
     private String login;
     private String type;
-    private byte[] photoOrg;
+    private String photoOrg;
     private String description;
     private String address;
     private String needs;
@@ -30,13 +30,7 @@ public class Organization {
         this.type = type;
         this.login = login;
         SharedPreferences sharedPreferences = SignInFragment.sharedPreferences;
-        List<String> stringArrayList = Arrays.asList(
-                sharedPreferences.getString("org_photo" + address, "NOT FOUND PREF").split(" "));
-        byte[] byteArray = new byte[stringArrayList.size()];
-        for (int i = 0; i < stringArrayList.size(); i++) {
-            byteArray[i] = Byte.parseByte(stringArrayList.get(i));
-        }
-        this.photoOrg = byteArray;
+        this.photoOrg = sharedPreferences.getString("org_photo" + address, "NOT FOUND PREF");
 
         this.description = description;
         this.address = address;
@@ -51,17 +45,7 @@ public class Organization {
         this.type = type;
         this.login = login;
         SharedPreferences sharedPreferences = SignInFragment.sharedPreferences;
-        List<String> stringArrayList = Arrays.asList(
-                sharedPreferences.getString("org_photo" + address, "NOT FOUND PREF").split(" "));
-        byte[] byteArray = new byte[stringArrayList.size()];
-        for (int i = 0; i < stringArrayList.size(); i++) {
-            try {
-                byteArray[i] = Byte.parseByte(stringArrayList.get(i));
-            }catch(Exception e){
-                byteArray[i] = 0;
-            }
-        }
-        this.photoOrg = byteArray;
+        this.photoOrg = sharedPreferences.getString("org_photo" + address, "NOT FOUND PREF");
 
         this.description = description;
         this.address = address;
@@ -77,17 +61,7 @@ public class Organization {
         this.type = type;
         this.login = login;
         SharedPreferences sharedPreferences = SignInFragment.sharedPreferences;
-        List<String> stringArrayList = Arrays.asList(
-                sharedPreferences.getString("org_photo" + address, "NOT FOUND PREF").split(" "));
-        byte[] byteArray = new byte[stringArrayList.size()];
-        for (int i = 0; i < stringArrayList.size(); i++) {
-            try {
-                byteArray[i] = Byte.parseByte(stringArrayList.get(i));
-            }catch(Exception e){
-                byteArray[i] = 0;
-            }
-        }
-        this.photoOrg = byteArray;
+        this.photoOrg = sharedPreferences.getString("org_photo" + address, "NOT FOUND PREF");
 
         this.description = description;
         this.address = address;
@@ -112,7 +86,7 @@ public class Organization {
         return type;
     }
 
-    public byte[] getPhotoOrg() {
+    public String getPhotoOrg() {
         return photoOrg;
     }
 
@@ -159,7 +133,7 @@ public class Organization {
         Organization that = (Organization) o;
         return Objects.equals(name, that.name) && Objects.equals(pass, that.pass) &&
                 Objects.equals(login, that.login) && Objects.equals(type, that.type) &&
-                Arrays.equals(photoOrg, that.photoOrg) && Objects.equals(description, that.description)
+               photoOrg.equals(that.photoOrg) && Objects.equals(description, that.description)
                 && Objects.equals(address, that.address) && Objects.equals(needs, that.needs) &&
                 Objects.equals(linkToWebsite, that.linkToWebsite);
     }
@@ -167,7 +141,7 @@ public class Organization {
     @Override
     public int hashCode() {
         int result = Objects.hash(name, pass, login, type, description, address, needs, linkToWebsite);
-        result = 31 * result + Arrays.hashCode(photoOrg);
+        result = 31 * result + photoOrg.hashCode();
         return result;
     }
 

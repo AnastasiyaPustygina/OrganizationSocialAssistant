@@ -13,7 +13,7 @@ public class Person {
     private String telephone;
     private String email;
     private String name;
-    private byte[] photoPer;
+    private String photoPer;
     private int age;
     private String dateOfBirth;
     private String city;
@@ -24,13 +24,8 @@ public class Person {
         if(data.contains("@")) this.email = data;
         else this.telephone = data;
         SharedPreferences sharedPreferences = SignInFragment.sharedPreferences;
-        List<String> stringArrayList = Arrays.asList(
-                sharedPreferences.getString("per_photo" + name, "NOT FOUND PREF").split(" "));
-        byte[] byteArray = new byte[stringArrayList.size()];
-        for (int i = 0; i < stringArrayList.size(); i++) {
-            byteArray[i] = Byte.parseByte(stringArrayList.get(i));
-        }
-        this.photoPer = byteArray;
+
+        this.photoPer = sharedPreferences.getString("per_photo" + name, "NOT FOUND PREF");
 
         this.name = name;
         this.age = age;
@@ -43,13 +38,8 @@ public class Person {
         if(data.contains("@")) this.email = data;
         else this.telephone = data;
         SharedPreferences sharedPreferences = SignInFragment.sharedPreferences;
-        List<String> stringArrayList = Arrays.asList(
-                sharedPreferences.getString("per_photo" + name, "NOT FOUND PREF").split(" "));
-        byte[] byteArray = new byte[stringArrayList.size()];
-        for (int i = 0; i < stringArrayList.size(); i++) {
-            byteArray[i] = Byte.parseByte(stringArrayList.get(i));
-        }
-        this.photoPer = byteArray;
+
+        this.photoPer = sharedPreferences.getString("per_photo" + name, "NOT FOUND PREF");
 
         this.name = name;
         this.age = age;
@@ -84,7 +74,7 @@ public class Person {
         return city;
     }
 
-    public byte[] getPhotoPer() {
+    public String getPhotoPer() {
         return photoPer;
     }
 
@@ -105,13 +95,13 @@ public class Person {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Person person = (Person) o;
-        return age == person.age && Objects.equals(telephone, person.telephone) && Objects.equals(email, person.email) && Objects.equals(name, person.name) && Arrays.equals(photoPer, person.photoPer) && Objects.equals(dateOfBirth, person.dateOfBirth) && Objects.equals(city, person.city);
+        return age == person.age && Objects.equals(telephone, person.telephone) && Objects.equals(email, person.email) && Objects.equals(name, person.name) && photoPer.equals(person.photoPer) && Objects.equals(dateOfBirth, person.dateOfBirth) && Objects.equals(city, person.city);
     }
 
     @Override
     public int hashCode() {
         int result = Objects.hash(telephone, email, name, age, dateOfBirth, city);
-        result = 31 * result + Arrays.hashCode(photoPer);
+        result = 31 * result + photoPer.hashCode();
         return result;
     }
 }

@@ -94,8 +94,14 @@ public class PersonProfileFragment extends Fragment {
 
         OpenHelper openHelper = new OpenHelper(getContext(), "op", null, OpenHelper.VERSION);
         Person person = openHelper.findPersonByLogin(getArguments().getString("NamePer"));
+
+        String[] s = person.getPhotoPer().split(" ");
+        byte[] byteArray = new byte[s.length];
+        for (int i = 0; i < s.length; i++) {
+            byteArray[i] = Byte.parseByte(s[i]);
+        }
         Bitmap bitmap = BitmapFactory.
-                decodeByteArray(person.getPhotoPer(), 0, person.getPhotoPer().length);
+                decodeByteArray(byteArray, 0, byteArray.length);
         iv_ava.setImageBitmap(bitmap);
 
         iv_arrow_back.setOnClickListener(new View.OnClickListener() {

@@ -101,8 +101,8 @@ public class SignInFragment extends Fragment {
             public void onClick(View view) {
                     if (ed_pass.getText().toString().isEmpty() || ed_data.getText().toString().isEmpty())
                         checking.setText("Не все поля заполнены");
-                    else if (ed_pass.getText().toString().equals(
-                            openHelper.findPassByLogin(ed_data.getText().toString()))) {
+                    else if ((ed_pass.getText().toString().hashCode() + "").equals(openHelper.findPassByLogin(ed_data.getText().toString())))
+                    {
                         Bundle bundle = new Bundle();
                         bundle.putString("LOG", ed_data.getText().toString());
                         btSignIn.setOnClickListener((view1) -> {

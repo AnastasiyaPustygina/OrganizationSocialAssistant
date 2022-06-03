@@ -47,6 +47,7 @@ public class ChatFragment extends Fragment {
     private final int width  = Resources.getSystem().getDisplayMetrics().widthPixels;
     private final int height  = Resources.getSystem().getDisplayMetrics().heightPixels;
     private float scale = Resources.getSystem().getDisplayMetrics().density;
+    private MyChatThread myChatThread;
 
 
 
@@ -121,7 +122,7 @@ public class ChatFragment extends Fragment {
                 }
             }
         });
-        MyChatThread myChatThread = new MyChatThread(getContext());
+        myChatThread = new MyChatThread(getContext());
         myChatThread.start();
         imOrg.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -154,8 +155,13 @@ public class ChatFragment extends Fragment {
             }
         });
 
+        String[] s = per.getPhotoPer().split(" ");
+        byte[] byteArray = new byte[s.length];
+        for (int i = 0; i < s.length; i++) {
+            byteArray[i] = Byte.parseByte(s[i]);
+        }
         imOrg.setImageBitmap(BitmapFactory.
-                decodeByteArray(per.getPhotoPer(), 0, per.getPhotoPer().length));
+                decodeByteArray(byteArray, 0, byteArray.length));
         namePer.setText(per.getName());
 
 
@@ -248,5 +254,9 @@ public class ChatFragment extends Fragment {
             b = !b;
         }
     }
-
+    @Override
+    public void onStop() {
+        super.onStop();
+        if(myChatThread.b) myChatThread.changeBool();
+    }
 }

@@ -27,6 +27,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -80,9 +81,13 @@ public class ChatListArrayAdapter extends RecyclerView.Adapter<ChatListArrayAdap
 
 
         try {
-            holder.ivPerAva.setImageBitmap(BitmapFactory.decodeByteArray(arrayListLastPer.get
-                            (position).getPhotoPer(), 0,
-                    arrayListLastPer.get(position).getPhotoPer().length));
+            String[] s = arrayListLastPer.get(position).getPhotoPer().split(" ");
+            byte[] byteArray = new byte[s.length];
+            for (int i = 0; i < s.length; i++) {
+                byteArray[i] = Byte.parseByte(s[i]);
+            }
+            holder.ivPerAva.setImageBitmap(BitmapFactory.decodeByteArray(byteArray, 0,
+                    byteArray.length));
             holder.lastMsg.setText(mapListChatIdAndMsg.get(arrayListChatId.get(position)));
             holder.tvNamePer.setText(arrayListLastPer.get(position).getName());
             Bundle bundle = new Bundle();

@@ -28,10 +28,11 @@ public class OrganizationMapper {
                     jsonObject.getString("organizationPhoto"));
             editor.commit();
             organization = new Organization(jsonObject.getInt("id"),
-                    jsonObject.getString("name"), "", jsonObject.getString("type"),
+                    jsonObject.getString("name"), jsonObject.getString("login")
+                    , jsonObject.getString("type"),
                     jsonObject.getString("description"), jsonObject.getString("address"),
-                    jsonObject.getString("needs"), jsonObject.getString("linkToWebsite"), ""
-                    ) ;
+                    jsonObject.getString("needs"), jsonObject.getString("linkToWebsite"),
+                    jsonObject.getString("password"));
         } catch (
                 JSONException e) {
             e.printStackTrace();

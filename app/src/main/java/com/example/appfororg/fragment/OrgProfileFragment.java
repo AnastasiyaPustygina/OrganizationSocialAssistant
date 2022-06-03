@@ -37,6 +37,7 @@ import com.example.appfororg.rest.AppApiVolley;
 
 import java.io.ByteArrayOutputStream;
 import java.util.Arrays;
+import java.util.List;
 
 public class OrgProfileFragment extends Fragment {
 
@@ -67,8 +68,8 @@ public class OrgProfileFragment extends Fragment {
                         Organization organization = openHelper.findOrgByLogin(
                                 getArguments().getString("LOG"));
                         iv_orgAva.setImageURI(result);
-                        byte[] photoOrg = null;
-                        Bitmap bitmap = null;
+                        StringBuilder photoOrg = null;
+                        Bitmap bitmap;
                         try {
                             iv_orgAva.buildDrawingCache();
                             bitmap = iv_orgAva.getDrawingCache().copy(Bitmap.Config.RGB_565, false);
@@ -76,7 +77,11 @@ public class OrgProfileFragment extends Fragment {
                             ByteArrayOutputStream stream = new ByteArrayOutputStream();
                             Bitmap.CompressFormat imFor = Bitmap.CompressFormat.JPEG;
                             bitmap.compress(imFor, 100, stream);
-                            photoOrg = stream.toByteArray();
+
+                            photoOrg = new StringBuilder();
+                            byte[] bytes = stream.toByteArray();
+                            for (int i = 0; i < bytes.length - 1; i++) photoOrg.append(bytes[i]).append(" ");
+                            photoOrg.append(bytes[bytes.length - 1]);
 
                             bitmap.recycle();
                         }catch (Exception e){
@@ -84,19 +89,13 @@ public class OrgProfileFragment extends Fragment {
                         }
 
                         SharedPreferences.Editor editor = sharedPreferences.edit();
-                        StringBuilder stringBuilder = new StringBuilder();
-                        for (int i = 0; i < photoOrg.length - 1; i++) {
-                            stringBuilder.append(String.valueOf(photoOrg[i])).append(" ");
-                        }
-                        stringBuilder.append(String.valueOf(
-                                photoOrg[photoOrg.length - 1]));
 
-                        editor.putString("org_photo" + organization.getAddress(), stringBuilder.toString());
+                        editor.putString("org_photo" + organization.getAddress(), photoOrg.toString());
                         editor.commit();
 
                         new AppApiVolley(getContext()).updateOrganization(
                                 organization.getId(), organization.getName(), organization.getLogin(),
-                                organization.getType(), photoOrg, organization.getDescription(),
+                                organization.getType(), photoOrg.toString(), organization.getDescription(),
                                 organization.getAddress(), organization.getNeeds(),
                                 organization.getLinkToWebsite(), organization.getPass());
                     }
@@ -128,6 +127,9 @@ public class OrgProfileFragment extends Fragment {
         LinearLayout linearLayoutPhotoName = getActivity().findViewById(R.id.ll_prof_photoAndName);
         OpenHelper openHelper = new OpenHelper
                 (getContext(), "op", null, OpenHelper.VERSION);
+
+        Log.e("ohp",openHelper.findAllPeople().toString());
+
         Organization organization = openHelper.findOrgByLogin(getArguments().getString("LOG"));
         int data = Math.max(width, height);
 
@@ -240,8 +242,18 @@ public class OrgProfileFragment extends Fragment {
             }
         });
 
+
+        String[] s = organization.getPhotoOrg().split(" ");
+        byte[] byteArray = new byte[s.length];
+        for (int i = 0; i < s.length; i++) {
+            try {
+                byteArray[i] = Byte.parseByte(s[i]);
+            }catch(Exception e){
+                byteArray[i] = 0;
+            }
+        }
         Bitmap bitmap = BitmapFactory.
-                decodeByteArray(organization.getPhotoOrg(), 0, organization.getPhotoOrg().length);
+                decodeByteArray(byteArray, 0, byteArray.length);
         iv_orgAva.setImageBitmap(bitmap);
         iv_orgAva.setOnClickListener(new View.OnClickListener() {
             @Override
